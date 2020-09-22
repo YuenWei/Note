@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>函数</title>
+  <script>
+  // 定义求和的函数
+  function sum(a, b){
+    var sum = a + b;
+    // document.write(sum + "<br>");
+    return sum;
+  }
+  var result = sum(10, 20);
+  document.write(result + "<br>");
+  var result = sum(123, 456);
+  document.write(result + "<br>");
+  var result = sum(123, "hello");
+  document.write(result + "<br>");
+
+  // 函数方式判断是否偶数
+  function isOu(num){
+    if(num % 2 ==0){
+      document.write(num + "是偶数" + "<br/>")
+    }else{
+      document.write(num + "是奇数" + "<br/>")
+    }
+  }
+  var result1 = isOu(199);
+
+  // 定义计算圆面积的函数
+  function pie(r){
+    return 3.14*r*r
+  }
+  var result2 = pie(2)
+  document.write("圆的面积是：" + result2 + "<br/>")
+
+  // 传入参数过多时，将参数写成对象类型传入
+  function info(o){
+   document.write("我的姓名：" + o.name + ",我的年龄：" + o.age  + ",我的性别：" + o.sex + "<br/>")
+  }
+  var obj = {
+    name: "icon",
+    age: "18",
+    sex: "F"
+  } 
+  info(obj);
+  </script>
+</head>
+<body>
+  
+</body>
+</html>
