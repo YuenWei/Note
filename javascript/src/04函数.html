@@ -45,6 +45,18 @@
     sex: "F"
   } 
   info(obj);
+
+  //立即执行函数：定义完马上执行
+  //匿名函数，注意{}被认为是代码块，会报错，可以用()包括整个代码块
+  //  要被调用执行，后面加（）
+   (function (){
+     alert("我是匿名函数");
+   })();
+  //  比如
+   (function(a,b){
+     var sum = a + b;
+     console.log("a+b=" + sum);
+   })(1,2);
   </script>
 </head>
 <body>
