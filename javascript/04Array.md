@@ -297,7 +297,6 @@ var perArr = [per, per2, per3, per4];
 console.log(perArr);
 
 // 要求：提取满18岁的对象，然后封装到新数组中返回
-
 // 实现：
 function getAdult(arr){
   var arrAdult = [];
