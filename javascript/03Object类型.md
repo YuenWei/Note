@@ -14,13 +14,13 @@
 
 ​	\- 由ES标准定义的对象，在任何的ES的实现中都可以使用；
 
-​	\- 比如： Math, String, Number, Boolean, Function, Object ……
+​	\- 比如： Math, String, Number, Boolean, Functions, Object, Array, Events, RegExp, Date
 
 2.宿主对象
 
 ​	\- 由JS运行环境提供的对象，目前来说主要指浏览器对象
 
-​	\- 比如： Dom, Bom
+​	\- 比如： Dom(Document, Element, Attribute, Event), Bom(Window, Navigator, Screen, History, Location)
 
 3.自定义对象
 
@@ -93,6 +93,10 @@
 ### 3 in  检查对象属性
 
 > 属性名 in 对象名,返回boolean
+
+**in检查属性时，对象中没有，但原型中有，返回true**
+
+**检查自己的属性时，使用 hasOwnPrototype("");**
 
 console.log("age" in obj2);
 
@@ -416,7 +420,8 @@ obj2.sayName()  <!--sayName()方法-->
   	- 每调用一次函数，就创建一个新的函数作用域，他们之间相互独立；
   	- 在函数作用域中，可以访问到全局作用域；
   	- 在函数作用域使用变量时，先在自身作用域内寻找，如果没有则在上一级中寻找（就近原则），如果全局作用域中任然没有，则会报错ReferencrError；
-  	- 如果要在**函数作用域中访问全局作用域，则使用window.a**
+  	- 如果要在**函数作用域中访问全局作用域，则使用window.a**；
+  	- 形参相当于在函数作用域中声明了变量
 
 ###### 变量的声明提前
 
@@ -427,7 +432,6 @@ obj2.sayName()  <!--sayName()方法-->
 如下：var a 提前，但赋值123则在log后执行<!--输出undefined--> 
 
 console.log(a)
-
 var a = 123;
 ```
 
@@ -435,7 +439,6 @@ var a = 123;
 如下：  报错 a is not defined
 
 console.log(a)
-
 a = 123
 ```
 
@@ -446,19 +449,191 @@ a = 123
 
 ```
 fun1()   <!--此处调用，会被执行，输出结果：fun1 -->
-
 fun2()	<!--此处调用，变量fun2会被提前声明， 但函数未被赋值，输出结果：undefined-->
-
 function fun1(){ <!-- 函数声明会被提前-->
-
-​	console.log("fun1")
-
+	console.log("fun1")
 }
 
 var fun2 = function(){  <!-- 函数声明不会被提前-->
-
-​	console.log("fun2")
-
+	console.log("fun2")
 }
+```
+
+### 8 this
+
+解析器在调用函数时每次都会想函数内部传递一个隐含的参数this 
+
+	- this指向一个对象，这个对象成为函数执行的上下文对象；
+ - 根据函数**调用方式**不同，this会指向不同的对象
+   	- 以函数形式调用时，this是window；
+   	- 以方法形式调用时，this是调用的object；
+   	- 以构造函数形式调用时，this是新创建的对象。
+
+### 9 工厂方法创建对象
+
+- 通过该方法可以批量创建对象，减少重复代码;
+- 创建的对象都是Object类型；
+- 局限-导致无法区分多种不同类型的对象
+
+```
+function createPerson(name, age, sex){
+	var obj = new Object();
+	obj.name = name,
+	obj.age = age,
+	obj.sex = sex
+	return obj;
+};
+
+var obj2 = createPerson("Hello", 18, "F");
+console.log(obj2);
+var obj3 = createPerson("Word", 29, "M");
+console.log(obj3);
+```
+
+### 10 构造函数
+
+- 构造函数是一个普通函数，创建方式和普通函数一样；
+
+- 不同的是，构造函数习惯上首字母大写；
+
+  区别：
+
+  	- 调用方式不同，普通函数直接调用，构造函数使用new关键字调研。
+
+##### 10.1构造函数执行流程
+
+- 1.创建新的对象；
+- 2.将新建的对象设置为this；在构造函数中可以使用this来引用新建的对象；
+- 3.逐行执行函数中的代码；
+- 4.将新建的对象作为返回值返回
+
+###### 构造函数
+
+```
+function Persion(name, age, sex){
+	this.name = name;
+	this.age = age;
+	this.sex = sex
+	this.sayName = function(){   //此处会重复调用,创建多个
+		alert("My name is " + this.name);
+	}
+}
+var per = Persion();	//普通函数
+var per = new Persion("Hell", 18, "F");  //构造函数  this == per
+```
+
+##### 10.2 构造函数共享方法
+
+###### **构造函数的改进1**:
+
+```
+function Persion(name, age, sex){
+	this.name = name;
+	this.age = age;
+	this.sex = sex
+	this.sayName = sayNameFun(this.name);
+}
+
+//将函数定义在全局作用域中，污染了全局作用域命名空间，也很不安全  ->原型
+function sayName(name){   //指向同一个sayName()
+	alert("My name is " + name);
+}
+var per = Persion();	//普通函数
+var per = new Persion("Hell", 18, "F");  //构造函数  this == per
+```
+
+> 对象 instanceof 构造函数  检查对象是否是构造函数的实例
+
+### 11 原型对象
+
+##### 11.1 原型 prototype
+
+ - 创建的每个函数，解析器都会向函数中添加prototype属性[object]；
+
+ - 当函数作为普通函数，调用prototype；
+
+ - 当函数通过构造函数调用时，他所创建的所有对象都会有一个隐含的属性\_\_proto\_\_，通过\_\_proto\_\_来访问该属性对象(即 函数的prototype和构造函数的\_\_proto\_\_都指向原型对象)，例1；
+
+ - 原型对象相当于一个公共的区域，所有同一个类的实例都可以访问该原型对象
+
+   所以可以将**对象中共有的内容，统一设置到原型对象中**，例2；
+
+- 当访问对象的属性或方法时，
+
+  - **先在自身中寻找，如果有则直接使用，**
+  - **如果没有，则在原型对象中寻找，**
+  - **如果原型对象中没有，则继续在原型对象的原型中寻找，直到找到Object对象的原型，**
+  - **Object对象的原型没有原型，如果在Object中依然没有找到，则返回undifined**
+
+- 原型对象也是对象，所以他也有原型
+
+  <img src="/Users/yuanwei/Library/Application Support/typora-user-images/image-20201001174859462.png" alt="image-20201001174859462" style="zoom: 33%;" />
+
+```
+例1:
+function createPerson(){
+  
+};
+
+var obj2 = createPerson();
+console.log(obj2);
+var obj3 = createPerson();
+console.log(obj3);
+var obj4 = new createPerson()
+console.log(obj4);
+
+console.log(createPerson.prototype);  /*  打印函数的原型对象 */
+console.log(obj4.__proto__);  /* 打印构造函数的原型对象 */
+//比较createPerson和其构造函数的原型对象
+console.log(createPerson.prototype == obj4.__proto__);   //返回 ture
+```
+
+```
+例2:
+function createPerson(){
+};
+createPerson.prototype.a = 124;  //原型对象中添加a属性
+var obj5 = new createPerson();
+```
+
+###### **构造函数的改进2**:
+
+```
+function Person(name, age, sex){
+	this.name = name;
+	this.age = age;
+	this.sex = sex
+	this.sayName = sayNameFun(this.name);
+}
+
+//向原型中添加sayName方法
+Person.prototype.sayName= function(){
+	alert("My name is " + this.name);
+}
+
+var per = Person();	//普通函数
+var per = new Person("Hell", 18, "F");  //构造函数  this == per
+```
+
+#####  11.2 访问原型
+
+**检查自己的属性时，使用 hasOwnPrototype("");**
+
+使用console.log()返回的时该对象的原型的toString()；
+
+修改原型里的toString()
+
+```
+function Person(name, age, sex){
+	this.name = name;
+	this.age = age;
+	this.sex = sex
+}
+Person.prototype.toString = function(){
+	return "Person[name=" + this.name + ",age=" + this.age + ",sex=" + this.sex +"]";
+}
+
+var per = new Person("Hill", 18, "F");
+console.log(per)
 ```
 
