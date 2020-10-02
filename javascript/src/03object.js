@@ -121,3 +121,21 @@ console.log(createPerson.prototype == obj4.__proto__);   //返回 ture
 createPerson.prototype.toString = function(){
 	return "Person[name=" + this.name + ",age=" + this.age + ",sex=" + this.sex +"]";
 }
+
+// 12 arguments
+/* 在调用函数时，浏览器每次都会传递两个隐含的参数
+   1. 函数的上下文对象this;
+   2. 封装实参的对象arguments
+      - arguments 是一个 类数组对象，可以通过索引获取数据，也可以获取长度
+      - 在调用函数时，传递的实参都会在arguments中保存
+   3. arguments.callee对应的函数对象是当前指向的函数对象
+*/
+
+function fun(){
+  console.log(arguments instanceof Array);
+  console.log(Array.isArray(arguments));
+  console.log(arguments);
+  console.log(arguments.callee);
+  console.log(arguments.length);
+}
+fun(1, 2);

@@ -416,6 +416,7 @@ obj2.sayName()  <!--sayName()方法-->
    - 全局作用域变量在任何地方都可以使用
 
 - 2.函数作用域，也称局部作用域
+  	
   	- 调用函数时创建函数作用域，函数执行完毕后，函数作用域销毁；
   	- 每调用一次函数，就创建一个新的函数作用域，他们之间相互独立；
   	- 在函数作用域中，可以访问到全局作用域；
@@ -466,8 +467,9 @@ var fun2 = function(){  <!-- 函数声明不会被提前-->
 	- this指向一个对象，这个对象成为函数执行的上下文对象；
  - 根据函数**调用方式**不同，this会指向不同的对象
    	- 以函数形式调用时，this是window；
-   	- 以方法形式调用时，this是调用的object；
-   	- 以构造函数形式调用时，this是新创建的对象。
+   - 以方法形式调用时，this是调用的object；
+   	- 以构造函数形式调用时，this是新创建的对象;
+   	- 以call()和apply()调用时，this是指定的对象
 
 ### 9 工厂方法创建对象
 
@@ -615,7 +617,7 @@ var per = Person();	//普通函数
 var per = new Person("Hell", 18, "F");  //构造函数  this == per
 ```
 
-#####  11.2 访问原型
+#####  11.2 访问原型
 
 **检查自己的属性时，使用 hasOwnPrototype("");**
 
@@ -635,5 +637,49 @@ Person.prototype.toString = function(){
 
 var per = new Person("Hill", 18, "F");
 console.log(per)
+```
+
+### 12 函数的方法
+
+call()和apply()
+
+ - 这两个方法都是函数对象的方法，需要通过函数对象来使用
+ - 当对函数调用call()和apply()时，都会调用函数执行
+ - 在调用call()和apply()时，可将一个对象指定为第一个参数，次数这个参数就是函数执行时的this
+
+##### 12.1 .call()
+
+call(指定的对象, 实参, 实参)
+
+call(obj, 2, 3)
+
+##### 12.2 .apply()
+
+apply()方法需要将实参封装到一个数组中统一传递
+
+apply(obj, [2, 3])
+
+##### 12.3 arguments()
+
+在调用函数时，浏览器每次都会传递两个隐含的参数
+
+-  函数的上下文对象this;
+
+- 封装实参的对象arguments
+  - arguments 是一个 类数组对象，可以通过索引获取数据，也可以获取长度；
+  - 在调用函数时，传递的实参都会在arguments中保存；
+  - arguments.length获取实参的长度；
+  - 即使不定义形参，也可以使用arguments获取实参，arguments[i]；
+  - arguments.callee对应的函数对象是当前指向的函数对象
+
+```
+function fun(){
+  console.log(arguments instanceof Array);
+  console.log(Array.isArray(arguments));
+  console.log(arguments);
+  console.log(arguments.callee);  //当前指向的函数对象
+  console.log(arguments.length);  //2
+}
+fun(1, 2);
 ```
 
