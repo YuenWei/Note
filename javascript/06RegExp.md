@@ -329,4 +329,3 @@ var mailReg = /^\w{3,16}(\.\w{1,})*@[A-z0-9]+(\.[A-z]{2,5}){1,2}$/;
 var result = mailReg.test(mail);
 console.log(result);
 ```
-
