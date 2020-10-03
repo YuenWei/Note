@@ -283,7 +283,7 @@ var s2 = 123;
 s2 = new String(s2);  //将基本数据类型number转为Number()对象类型
 s2.name = "num";      //对象类型添加name属性
 
-console.log(s2);  //String {"123", name: "num"}
+console.log(s2);  //String {"123", name: "num"}
 console.log(typeof s2); //object
 console.log(s2.name);  //num  
 ```
@@ -347,4 +347,11 @@ String 类定义了大量操作字符串的方法，例如从字符串中提取�
 | [toString()](https://www.w3school.com.cn/jsref/jsref_toString_string.asp) | 返回字符串。                                         |
 | [valueOf()](https://www.w3school.com.cn/jsref/jsref_valueOf_string.asp) | 返回某个字符串对象的原始值。                         |
 
-###### 1.2.1 
+##### 1.3 支持正则表达式的String对象的方法
+
+| 方法                                                         | 描述                             | FF   | IE   |
+| :----------------------------------------------------------- | :------------------------------- | :--- | :--- |
+| [search](https://www.w3school.com.cn/jsref/jsref_search.asp) | 检索与正则表达式相匹配的值。     | 1    | 4    |
+| [match](https://www.w3school.com.cn/jsref/jsref_match.asp)   | 找到一个或多个正则表达式的匹配。 | 1    | 4    |
+| [replace](https://www.w3school.com.cn/jsref/jsref_replace.asp) | 替换与正则表达式匹配的子串。     | 1    | 4    |
+| [split](https://www.w3school.com.cn/jsref/jsref_split.asp)   | 把字符串分割为字符串数组。       | 1    | 4    |
