@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dom</title>
+  <style>
+    button{border:none;padding:6px 15px;}
+    a{cursor:pointer;}
+    .dom{width:600px;height:auto;padding:20px;border:1px solid #999;display:flex;font-size:13px;float:left;margin-right:20px;}
+    .dom-item{flex:1;}
+    ul,li{list-style-type:none;margin:0;padding:0;}
+    .item,ul{width:100%;}
+    .item,ul,ul li{float:left;}
+    .item ul li{padding:3px 6px;margin-right:10px;background:#0084ff;color:#fff;}
+    label{width:100%;display:block;}
+    button{display:block;margin-bottom:5px;}
+    .focus p,.focus .btn{text-align:center;}
+    .focus b{margin:0 3px;}
+    .focus img{width:250px;height:250px;border:1px solid #f2f2f2;}
+    .focus .btn button{margin:0 auto;display:inline;background:#0084ff;color:#fff;}
+    table{border-collapse: collapse;}
+    table td,table th{border:1px solid #f2f2f2;padding:6px 10px;}
+    form{padding:10px;border:1px solid #f2f2f2;}
+    label{margin:5px auto;text-align:center;}
+    table a{color:#0084ff;}
+
+    .box{width:200px;height:200px;background:#f00;border:1px solid #f999;margin:5px;padding:10px;box-shadow:0 2px 5px #eee;}
+  </style>
+  <script>
+    // window.onload = function(){
+    //   alert("页面加载完成后执行");
+    // }
+  </script>
+</head>
+<body>
+  <h3>DOM</h3>
+  <!-- 1. 文档节点document -->
+  <button id="btn">按钮</button>
+  <div class="dom">
+    <div class="dom-item">
+      <div class="item">
+        <p>你喜欢的城市：</p>
+        <ul id="city">
+          <li id="beijing">北京</li>
+          <li id="shanghai">上海</li>
+          <li id="chengdu">成都</li>
+          <li id="xi'an">西安</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p>你喜欢的游戏：</p>
+        <ul id="game">
+          <li id="lol">英雄联盟</li>
+          <li>王者荣耀</li>
+          <li>天下三</li>
+          <li>吃鸡</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p>你手机的OS：</p>
+        <ul id="phone">
+          <li id="ios">iOS</li>
+          <li id="android">Android</li>
+          <li>WP</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p>你的性别：</p>
+        <label for="sex">
+          <input type="radio" name="sex" id="male">Male
+          <input type="radio" name="sex" id="fmale">Fmale
+        </label>
+      </div>
+      <div class="item">
+        <p>用户名：</p>
+        <label for="name">
+          <input type="text" name="name" id="username" placeholder="" value="icon">
+        </label>
+      </div>
+    </div>
+    <div class="dom-item">
+      <button id="btn1">查找#beijing节点</button>
+      <button id="btn2">查找所有li节点</button>
+      <button id="btn3">查找name=sex的所有节点</button>
+      <button id="btn4">查找#city下的所有li节点</button>
+      <button id="btn5">返回#city下的所有节点</button>
+      <button id="btn6">返回#phone的第一个子节点</button>
+      <button id="btn7">返回#beijing的父节点</button>
+      <button id="btn8">返回#andriod的前一个兄弟节点</button>
+      <button id="btn9">返回#username的value属性</button>
+      <button id="btn10">设置#username的value属性</button>
+      <button id="btn11">返回#beijing的文本值</button>
+    </div>
+  </div>
+  
+  <!-- 练习：图片切换 -->
+  <div class="dom">
+    <div class="focus">
+      <p>练习2：一共有<b id="imgNum"></b>张图，当前时第<b id="curImg"></b>张</p>
+      <img id="focus-img" src="images/1.jpg">
+      <div class="btn">
+        <button id="prev">前一张</button>
+        <button id="next">后一张</button>
+      </div>
+    </div>
+    <div class="focus">
+      <p>练习3：全选/全不选</p>
+      <form action="" method="post">
+        你爱好的运动是？<input type="checkbox" name="" id="checkdAll"> <br>
+
+        <input type="checkbox" name="sports" id="" value="足球" />足球
+        <input type="checkbox" name="sports" id="" value="篮球" />篮球
+        <input type="checkbox" name="sports" id="" value="排球" />排球
+        <input type="checkbox" name="sports" id="" value="水球" />水球 <br>
+
+        <input type="button" id="btnCheckAll" value="全选">
+        <input type="button" id="btnCheckNo" value="全不选">
+        <input type="button" id="btnRev" value="反选">
+        <input type="button" id="btnSubmit" value="提交">
+      </form>
+    </div>
+  </div>
+
+  <div class="dom">
+    <div class="dom-item">
+      <div class="item">
+        <p>练习3:DOM增删改-你喜欢的城市：</p>
+        <ul id="city2">
+          <li id="beijing2">北京</li>
+          <li id="shanghai">上海</li>
+          <li id="chengdu">成都</li>
+          <li id="xi'an">西安</li>
+        </ul>
+      </div>
+    </div>
+    <div class="dom-item">
+      <button id="btn2-1">创建一个“广州”节点，添加到#city2下</button>
+      <button id="btn2-2">将“广州”节点插入到#beijing2前</button>
+      <button id="btn2-3">使用“广州”节点替换#beijing2节点</button>
+      <button id="btn2-4">删除#beijing2节点</button>
+      <button id="btn2-5">读取#city2内的html代码</button>
+      <button id="btn2-6">设置#beijing2内的html代码</button>
+      <button id="btn2-7">用innerHTML向city2中添加广州</button>
+    </div>
+  </div>
+
+  <div class="dom">
+    <div class="dom-item">
+      <div class="item">
+        <p>练习4:Ttabl 增删改：</p>
+        <!-- 1.根据删除按钮删除所在行元素
+        2.form表单增加信息 -->
+        <table>
+          <thead>
+            <tr>
+              <th>姓名</th><th>邮箱</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="info-list">
+            <tr><td>John</td><td>12306@qq.com</td><td><a>删除</a></td></tr>
+            <tr><td>Tom</td><td>tom@163.com</td><td><a>删除</a></td></tr>
+            <tr><td>HanMeiMei</td><td>hmm@qq.com</td><td><a>删除</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      
+    </div>
+    <div class="dom-item">
+      <div class="item">
+        <p>新增信息：</p>
+        <form action="" method="post">
+          <label for="name">姓名：<input type="text" name="name" id="name"></label>
+          <label for="mail">邮箱：<input type="text" name="mail" id="mail"></label>
+          <label for="mail"><input type="button" value="提交" id="btnAddInfo"></label>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="dom">
+    <div class="box" id="box1"></div>
+    <div class="dom-item">
+      <input type="button" value="改长" id="btn-box-1">
+    </div>
+  </div>
+  <script>
+    // 1.1 获取按钮对象
+    var btn = document.getElementById("btn");
+    console.log(btn);
+
+    // 1.2修改button名称
+    btn.innerHTML = "Button";
+
+    // 1.3  添加事件 onclick,ondbclick
+    btn.onclick = function(){
+      alert("我点击了按钮");
+    }
+
+    //文档加载顺序
+    // 浏览器在加载页面时，是按照自上而下的顺序加载的；
+    // 读取到一行运行一行，如果将script代码写在页面的head里，在代码执行时，页面还没有加载；
+
+    // onload事件在整个页面加载完成后再触发
+    // window.onload = function(){};
+
+    // 1.4 document获取元素节点
+    // getElementById()  通过ID获取一个元素节点
+    // getElementsByTagName()  通过标签名获取一组节点对象
+
+    // 练习
+    // 1.查找id=beijing的节点
+    var btn1 = document.getElementById("btn1");
+    btn1.onclick = function(){
+      var beijing = document.getElementById("beijing");
+      console.log(beijing);
+      alert(beijing.innerText);
+    }
+
+    // 2.查找所有li节点
+    var btn2 = document.getElementById("btn2");
+    btn2.onclick = function(){
+      //返回一个类数组对象，所有查询到的对象保存在这个类数组对象中
+      var allLi = document.getElementsByTagName("li");
+      console.log(allLi);
+      //alert(allLi.length);
+      for(var i=0; i<allLi.length; i++){
+        console.log(allLi[i]);
+      }
+    }
+
+    // 3. 查找name=sex的所有节点
+    var btn3 = document.getElementById("btn3");
+    btn3.onclick = function(){
+      var names = document.getElementsByName("sex");
+      console.log(names);
+    }
+
+    // 4. 查找#city下的所有li节点
+    var btn4 = document.getElementById("btn4");
+    btn4.onclick = function(){
+      var lis = document.getElementById("city").getElementsByTagName("li")
+      console.log(lis);
+    }
+    
+    // 5. 查找#city下的所有子节点
+    var btn5 = document.getElementById("btn5");
+    btn5.onclick = function(){
+      //childNodes 包括换行和空格
+      var linode = document.getElementById("city").childNodes;
+      console.log(linode.length);
+      console.log(linode);
+    }
+    
+
+    // 6. 返回#phone的第一个子节点
+    var btn6 = document.getElementById("btn6");
+    btn6.onclick = function(){
+      //firstChild  子节点 firstElementChild  子元素
+      var phone = document.getElementById("phone").firstElementChild
+      console.log(phone);
+    }
+
+    // 7. 返回#beijing的父节点
+    var btn7 = document.getElementById("btn7");
+    btn7.onclick = function(){
+      //parentNode  pareElement
+      var pare = document.getElementById("beijing").parentNode;
+      //var pare = document.getElementById("beijing").parentElement;
+      console.log(pare);
+    }
+
+    // 8. 返回#andriod的前一个兄弟节点
+    var btn8 = document.getElementById("btn8");
+    btn8.onclick = function(){
+      //previousSibling    previousElementSibling
+      var pare = document.getElementById("android").previousSibling;
+      // var pare = document.getElementById("android").previousElementSibling;
+      console.log(pare);
+    }
+
+    // 9. 返回#username的value属性
+    var btn9 = document.getElementById("btn9");
+    btn9.onclick = function(){
+      // .value .id .name  class是className
+      var username = document.getElementById("username").value;
+      console.log(username);
+    }
+
+    // 10. 设置#username的value属性
+    var btn10 = document.getElementById("btn10");
+    btn10.onclick = function(){
+      var username = document.getElementById("username");
+      username.value = "hello";
+    }
+
+    // 11. 返回#beijing的文本值
+    var btn11 = document.getElementById("btn11");
+    btn11.onclick = function(){
+      var beijing2 = document.getElementById("beijing");
+      //innerHtml innerText
+      console.log(beijing2.innerText);
+      //#beijing 里的标签内容也是 第一个子节点和最后一个子节点
+      var beijing3 = document.getElementById("beijing").firstChild;
+      console.log(beijing3.nodeValue);
+    }
+  </script>
+  <script>
+    var arrImg = ["images/1.jpg", "images/2.jpg", "images/3.jpg", "images/4.jpg", "images/5.jpg"];
+    var btnLeft = document.getElementById("prev");
+    var btnRight = document.getElementById("next");
+    var imgSrc = document.getElementById("focus-img");
+    var imgIndex = 0;
+    document.getElementById("imgNum").innerText = arrImg.length;
+    document.getElementById("curImg").innerText = (imgIndex + 1);
+    btnLeft.onclick = function(){
+      imgIndex--;
+      if(imgIndex<0){
+        imgIndex = arrImg.length - 1;
+      }
+      imgSrc.src = arrImg[imgIndex];
+      document.getElementById("curImg").innerText = (imgIndex + 1);
+    }
+    btnRight.onclick = function(){
+      imgIndex++;
+      if(imgIndex>(arrImg.length - 1)){
+        imgIndex = 0;
+      }
+      imgSrc.src = arrImg[imgIndex];
+      document.getElementById("curImg").innerText = (imgIndex + 1);
+    }
+  </script>
+  <script>
+    // 3.1 全选
+    var checkAll = document.getElementById("btnCheckAll");
+    checkAll.onclick = function(){
+      var checkAllInput = document.getElementsByName("sports");
+      for(var i=0; i<checkAllInput.length; i++){
+        checkAllInput[i].checked = true;
+      }
+    }
+
+    // 3.2 全不选
+    var checkAllNo = document.getElementById("btnCheckNo");
+    checkAllNo.onclick = function(){
+      var checkAllNoInput = document.getElementsByName("sports");
+      for(var i=0; i<checkAllNoInput.length; i++){
+        checkAllNoInput[i].checked = false;
+      }
+    }
+
+    // 3.3 反选
+    var checkRev = document.getElementById("btnRev");
+    checkRev.onclick = function(){
+      var checkRevInput = document.getElementsByName("sports");
+      for(var i=0; i<checkRevInput.length; i++){
+        checkRevInput[i].checked = !checkRevInput[i].checked;
+      }
+    }
+
+    // 3.4 提交
+    var checkSubmit = document.getElementById("btnSubmit");
+    checkSubmit.onclick = function(){
+      var checkSubmitInput = document.getElementsByName("sports");
+      var checkSport = [];
+      for(var i=0; i<checkSubmitInput.length; i++){
+        if(checkSubmitInput[i].checked == true){
+          console.log(checkSubmitInput[i]);
+          checkSport.push(checkSubmitInput[i].value);
+        }
+        
+      }
+      console.log(checkSport);
+    }
+
+    // 3.5 全选/全不选
+    // 第一步：根据按钮checkbox状态，设置列表checkbox的状态
+    var revCheck = document.getElementById("checkdAll");
+    var sports = document.getElementsByName("sports");
+    var checkNum = 0;
+    var sportLength = sports.length;
+    revCheck.onclick = function(){
+      for(var i=0; i<sportLength; i++){
+        // 默认不选，当点击后，列表checkbox状态等于按钮checkbox状态
+        sports[i].checked = this.checked;
+      }
+      /*console.log(checkNum);
+      if(checkNum<sportLength){
+        for(var i=0; i<sportLength; i++){
+          sports[i].checked = true;
+          console.log("设置为true");
+        }
+        revCheck.checked = true;
+      }else{
+        for(var i=0; i<sports.length; i++){
+          sports[i].checked = false;
+        }
+        revCheck.checked = false;
+      }*/
+    }
+    // 第二步：四个多选框分别绑定onclick()事件，监听sport列表选择状态，改变全选/全不选状态
+    for(var j=0; j<sportLength;j++){
+      sports[j].onclick = function(){
+        console.log("点击了列表checkbox");
+        //监听列表checkbox的状态
+        //m默认全选中
+        revCheck.checked = true;
+        for(var n=0; n<sportLength;n++){  
+          //遇到不全选，立即设置为false，通知循环
+          if(!sports[n].checked){
+          revCheck.checked = false;
+          break;
+          }
+        }
+      }
+    }
+
+    //剩余问题： 全选/全不选/反选 按钮影响 (全选/全不选)状态
+
+    // 其他DOM查询方法
+    /*
+    1.6 获取body元素 
+    //方法一
+    var body = getElementBytagName("body")[0]
+
+    //方法二
+    var body = document.body;
+
+    1.7 获取html元素
+    var html = document.documentElement;
+
+    1.8 获取所有元素all
+    var all = document.all;
+    var all = document.getElementsByTagName("*");
+
+    1.9 获取ClassName元素 IE9+
+    var className = document.getElementsByClassName(".class");
+
+    1.10  querySelector()
+    **IE8+**
+      - 选择器字符串查询元素
+      - 使用该方法，返回唯一一个元素，如果满足的条件有多个，只返回第一个
+    var div = document.querySelector(".wrap .w1100");
+    */
+  </script>
+  <script>
+    // 2 DOM 增删改
+    // 都是在父节点下操作子节点
+    // 2.1 创建节点
+    var city2 = document.getElementById("city2");
+    var beijing2 = document.getElementById("beijing2");
+    // -1 创建元素,传递创建元素标签
+    var addLi = document.createElement("li");
+    // -2 创建文本节点
+    var addText = document.createTextNode("广州");
+    // -3 将addText 设置为addLi 的子节点
+    addLi.appendChild(addText);
+    console.log(addLi);
+
+    // 按钮1:创建一个“广州”节点，添加到#city2下
+    var btn2_1 = document.getElementById("btn2-1");
+    btn2_1.onclick = function(){
+      city2.appendChild(addLi);
+    }
+
+    // 按钮2:将“广州”节点插入到#beijing2前
+    var btn2_2 = document.getElementById("btn2-2");
+    btn2_2.onclick = function(){
+      city2.insertBefore(addLi, beijing2);
+    }
+
+    // 按钮3:使用“广州”节点替换#beijing2节点
+    var btn2_3 = document.getElementById("btn2-3");
+    btn2_3.onclick = function(){
+      city2.replaceChild(addLi, beijing2)
+    }
+
+    // 按钮4:删除#beijing2节点
+    var btn2_4 = document.getElementById("btn2-4");
+    btn2_4.onclick = function(){
+      city2.removeChild(beijing2);
+      // beijing2.parentNode.removeChild(beijing2);
+    }
+
+    // 按钮5:读取#city2内的html代码
+    var btn2_5 = document.getElementById("btn2-5");
+    btn2_5.onclick = function(){
+      var city2HTML = city2.innerHTML;
+      console.log(city2HTML);
+    }
+
+    // 按钮6:设置#beijing2内的html代码
+    var btn2_6 = document.getElementById("btn2-6");
+    btn2_6.onclick = function(){
+      var addInfo = '<b>帝都</b>';
+      beijing2.innerHTML = addInfo;
+    }
+
+    // 按钮7:用innerHTML向city2中添加广州
+    var btn2_7 = document.getElementById("btn2-7");
+    btn2_7.onclick = function(){
+      //city2.innerHTML += addHTML; //等于删了重新加入，可能会影响事件
+      // -1 创建元素
+      var addElement = document.createElement("li");
+      addElement.innerHTML = "广州";
+      city2.appendChild(addElement);
+    }
+  </script>
+  <script>
+    //2.9 抽出单击事件，当新增信息时需要绑定点击事件
+    function deleteInfo() {
+      allTagA[i].onclick = function(){
+        //获取到当前a标签的父节点tr
+        var curTr = this.parentNode.parentNode;
+        // var curName = curTr.getElementsByTagName("td")[0].innerText;
+        var curName = curTr.firstElementChild.innerText;
+        //console.log(curTr);
+        //1.3 删除节点
+        var flag = confirm("确认删除" + curName + "吗？");
+        if(flag){
+          curTr.parentNode.removeChild(curTr);
+        }
+      }
+    };
+    // 1. 删除
+    // 1.1 获取table里所有阿标签
+    var allTagA = document.getElementsByTagName("a");
+    // 1.2 遍历a标签
+    for(var i=0; i<allTagA.length; i++){  //for循环在页面加载完后执行，故i=3,然后才是点击响应事件
+      //console.log(allTagA[i]);
+      allTagA[i].onclick = deleteInfo;  //不加(),使用的是对象，不是函数的返回值
+      // allTagA[i].onclick = function(){
+      //   //获取到当前a标签的父节点tr
+      //   var curTr = this.parentNode.parentNode;
+      //   // var curName = curTr.getElementsByTagName("td")[0].innerText;
+      //   var curName = curTr.firstElementChild.innerText;
+      //   //console.log(curTr);
+      //   //1.3 删除节点
+      //   var flag = confirm("确认删除" + curName + "吗？");
+      //   if(flag){
+      //     curTr.parentNode.removeChild(curTr);
+      //   }
+      // }
+    }
+
+    // 2. 增加
+    var btnAddInfo = document.getElementById("btnAddInfo");
+    btnAddInfo.onclick = function(){
+      // 2.1 获取表单的值
+      var addName = document.getElementById("name").value;
+      var addMail = document.getElementById("mail").value;
+      console.log(addName + addMail);
+      if(addName == "" || addMail == ""){
+        alert("输入不能为空");
+      }else{
+        //2.2 创建4个子元素
+      /*  var infoTr = document.createElement("tr");
+        var nameTd = document.createElement("td");
+        var mailTd = document.createElement("td");
+        var aTd = document.createElement("td");
+        var aTag = document.createElement("a");
+        // 2.3 创建3个子文本
+        var nameText = document.createTextNode(addName);
+        var mailText = document.createTextNode(addMail);
+        var aText = document.createTextNode("删除");
+        // 2.4 文本添加td节点
+        nameTd.appendChild(nameText);
+        mailTd.appendChild(mailText);
+        aTag.appendChild(aText);
+        aTd.appendChild(aTag);
+        // 2.5 所有td添加到tr
+        infoTr.appendChild(nameTd);
+        infoTr.appendChild(mailTd);
+        infoTr.appendChild(aTd);
+        // 2.6为新增的a绑定单击事件
+        // aTag.href = "javascript:;"
+        aTag.onclick = deleteInfo;
+        */
+
+        // 代码优化2.2-2.5 innerHTML
+        var infoTr = document.createElement("tr");
+        infoTr.innerHTML = "<td>" + addName + "</td><td>" + addMail+ "</td><td><a>删除</a></td>";
+        infoTr.getElementsByTagName("a")[0].onclick = deleteInfo;
+
+        // 2.7 将tr添加到table 注意table>tbody结构
+        console.log(infoTr);
+        document.getElementById("info-list").appendChild(infoTr);
+      }
+    }
+  </script>
+
+  <script>
+    // 3 DOM操作CSS
+    // 元素.style.样式名 = 样式值;
+    var btnBox1 = document.getElementById("btn-box-1");
+    btnBox1.onclick =function(){
+      var box1 = document.getElementById("box1");
+      // 3.1 修改width
+      box1.style.width = "250px";
+      // 3.1 修改backgroundColor
+      box1.style.backgroundColor = "#ff0";
+
+      // 3.2-1 currentStyle 读取当前显示的样式
+      // 语法：元素.style.currentStyle.样式名  仅支持IE
+      //如：在原来的基础上增加100px宽度
+      // var currentStyle = box1.currentStyle.width;
+      // var currentStyle = box1.currentStyle['width'];
+      // console.log(currentStyle);
+
+      // 3.2-2 getComputedStyle()
+      /*
+      不支持IE8及一下
+      此方法是window的方法，可以直接使用
+        - 参数1：要获取的元素；
+        - 参数2：可以传递一个伪元素，一般都为null；
+      该方法会返回一个对象，对象中封装了当前元素的样式。获取到的是具体长度等，不会是auto。
+      */
+      var currentStyle = getComputedStyle(box1, null).width;
+      console.log(currentStyle);
+
+      // 3.2 兼容所有浏览器，结合3.2-1和3.2-2
+      function getStyle(obj, name){
+        //不写window，在IE8中以为变量，会全局寻找，没找到会报错，故需加window
+        if(window.getComputedStyle){
+          return getComputedStyle['name'];
+        }else{
+          return obj.currentStyle['name']
+        }
+      }
+    }
+  </script>
+</body>
+</html>
