@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{margin:0;padding:0;}
+    body{text-align:center;}
+    ul,li{list-style:none;}
+    .focus{width:360px;height:360px;overflow:hidden;border:1px solid #f00;margin:30px auto;position:relative;}
+    .focus ul{display:inline-block;position:absolute;left:0;}
+    /* 移动时开启绝对定位 */
+    .focus ul li{width:360px;float:left;}
+    .focus img{width:100%;}
+    .num{position:absolute;bottom:10px;z-index:9;}
+    .num a{width:6px;height:6px;border-radius:50%;border:1px solid #d84f3d;margin:0 2px;background:#E86452;float:left;opacity:.75;filter:alpha(opacity=75);}
+    .num a:hover,.num a.cur{opacity:1;}
+  </style>
+  <script type="text/javascript" src="./tools.js"></script>
+  <script>
+  window.onload = function(){
+    // 设置ul宽度
+    var imgUl = document.getElementById("imgUl");
+    var imgLength = imgUl.getElementsByTagName("li").length;
+    console.log(imgLength);
+    var imgWidth = imgUl.getElementsByTagName("li")[0].offsetWidth;
+    console.log(imgWidth);
+    imgUl.style.width = imgWidth*imgLength + "px";
+    
+    //计算num left
+    var focusNav = document.getElementsByClassName("focus")[0];
+    var numNav = document.getElementsByClassName("num")[0];
+    numNav.style.left = (focusNav.offsetWidth - numNav.offsetWidth)/2 + "px";
+
+    // num a标签 以及默认效果
+    var numA = numNav.getElementsByTagName("a");
+    var index = 0;
+    numA[index].style.backgroundColor = "#fff";
+
+    var timer;
+    
+    // 点击 底部a标签切换图片
+    for(var i=0; i<numA.length; i++){
+      // 点击链接时，关闭自动切换定时器
+      clearInterval(timer);
+
+      // a标签添加id属性
+      numA[i].id = i;
+      numA[i].onclick = function(){
+        // 获取点击的标签索引，并将其设置为index
+        index = this.id;
+        // 偏移量计算，索引*图片宽度
+        //imgUl.style.left = -(index*imgWidth) + "px";
+        setA();
+        // 切换使用定时器 move函数
+        move(imgUl, "left", 50, -imgWidth*index, function(){ 
+          // 点击动画完毕，开启自动切换定时器
+          autoFloat();
+        })
+      }
+    }
+    autoFloat();
+
+    // 改变选中的num a标签效果
+    function setA(){
+      // 判断是否最后一张图片
+      console.log("图片序号：" + index);
+      if(index >= imgLength-1){
+        index = 0;
+        imgUl.style.left = 0;
+      }
+      for(var i=0; i<numA.length; i++){
+        numA[i].style.backgroundColor = '';
+      }
+      numA[index].style.backgroundColor = "#fff";
+    }
+
+    // 开启自动切换函数
+    function autoFloat(){
+      // 定时器切换图片
+      timer = setInterval(() => {
+        // 索引自增
+        index++;
+        // 判断index最大值
+        index %= imgLength;
+        //执行动画切换图片
+        move(imgUl, "left", 50, -imgWidth*index, function(){
+          setA();
+        })
+      }, 3000);
+    }
+
+  }
+  </script>
+</head>
+<body>
+  <div class="focus">
+    <ul id="imgUl">
+      <li><img src="./images/1.jpg" alt=""></li>
+      <li><img src="./images/2.jpg" alt=""></li>
+      <li><img src="./images/3.jpg" alt=""></li>
+      <li><img src="./images/4.jpg" alt=""></li>
+      <li><img src="./images/5.jpg" alt=""></li>
+    </ul>
+    <div class="num">
+      <a href="javascript:;"></a>
+      <a href="javascript:;"></a>
+      <a href="javascript:;"></a>
+      <a href="javascript:;"></a>
+      <a href="javascript:;"></a>
+    </div>
+  </div>
+</body>
+</html>

@@ -405,7 +405,7 @@ function getStyle(obj, name){
 ```
 <div style="width:100px;height:100px;padding:10px;border:10px solid #888;"></div>
 
-clientHeight;   //返回**120**  = content+padding
+clientHeight;   //返回**120**  = content+padding
 style.height;	//返回**110px
 ```
 
@@ -433,7 +433,7 @@ element.offsetParent	返回元素的偏移容器。
 element.offsetTop	返回元素的垂直偏移位置。
 ```
 
-###### 3.5.4 scollHeight
+###### 3.5.4 scrollHeight
 
 返回元素的整体高度。
 
@@ -445,7 +445,7 @@ element.offsetTop	返回元素的垂直偏移位置。
 	</div>
 </div>
 
-scrollHeight;	//返回300
+#box-pare  scrollHeight;	//返回300
 ```
 
 ```
@@ -460,7 +460,371 @@ element.scrollTop	返回元素上边缘与视图之间的距离。
 使用场景：注册时阅读完毕，滚动到底部意为同意注册协议。
 ```
 
+###### 3.5.5 pageX
 
+**clientX，clientY** 	相对触发事件元素的偏移量
+
+鼠标事件都是在浏览器视口中的特定位置发生的。这个位置信息保存在事件对象的clientX和clientY属性中，所有浏览器都支持这两个属性。
+
+**pageX，pageY	**相对**整个页面**的偏移
+
+pageX和pageY两个属性代表鼠标光标在页面中的位置，因此坐标是从页面本身而非视口的左边和顶边计算的。在没有滚动的情况下，clientX和cilentY与pageX和pageY是相等的。
+
+**screenX，screenY**	相对**电脑屏幕**的偏移量
+
+### 4 Event对象
+
+https://www.w3school.com.cn/jsref/dom_obj_event.asp
+
+事件对象
+
+ - 当事件的响应函数被触发时，浏览器每次都会将一个事件对象作为实参传递给响应函数；
+ - 在事件对象中，封装了当前事件的一切信息，比如：鼠标坐标，键盘按键，鼠标滚动方向
+   - 在IE8中，响应函数被触发时，浏览器不会传递事件对象；
+   - 在IE8及以下浏览器中，是将**事件作为window对象的属性保存的** 即window.event
+
+```
+<p>练习5:实时记录鼠标位置</p>
+<div class="box-mouse" id="box-mouse"></div>
+<div class="box-mouse-text" id="box-mouse-text"></div>
+```
+
+```
+var mouseArea = document.getElementById("box-mouse");
+var mouseText = document.getElementById("box-mouse-text");
+mouseArea.onmousemove = function(){
+  var x = event.clientX;	//获取鼠标指针的X坐标值
+  var y = event.clientY;	//获取鼠标指针的Y坐标值
+  var axisInfo = "x=" + x + ", y=" + y;
+  mouseText.innerText = axisInfo;
+	}
+mouseArea.onmouseout =function(){
+  var axisInfo = "";
+  mouseText.innerText = axisInfo;
+  }
+```
+
+改进：
+
+```
+方法一：
+if(!event){
+	event = window.event;
+	……
+}
+
+方法二：
+if(event = event || event = window.event){
+	……
+}
+```
+
+##### 4.1 事件冒泡 event.cancelBubble
+
+- 指**相同事件向上传导**：当子元素的事件触发时，其祖先元素也会触发相同的事件；
+- 如果不希望发生冒泡事件，可以**通过事件对象取消冒泡**；event.cancelBubble = true;
+
+```
+var eventPop = document.getElementById("event-pop");
+var eventPopSpan = document.getElementById("event-pop-span");
+
+document.body.onclick = function(){
+	console.log("点了body");
+}
+eventPop.onclick = function(){
+	console.log("点了box-pop");
+}
+
+eventPopSpan.onclick = function(){
+	event.cancelBubble = true;	//取消其父元素 body,div#eventPop的点击冒泡事件
+	console.log("点了span");
+}
+
+//当点击span时，同时出发 body,div#eventPop,div#eventPop>span 的单击事件
+```
+
+
+
+##### 4.2 事件委派 event.target
+
+- 只绑定一次事件，即可应用到多个元素上，即使是后来添加的；
+- 可以绑定到其共同的父元素，当子元素事件触发时，会一直冒泡到父元素，从而通过父元素的响应函数来处理事件；
+- 委派事件利用了冒泡，通过委派可以减少绑定次数，提高性能。
+
+```
+<div>
+  <ul>
+    <li><a href="javascript:;">超链接一</</li>
+    <li><a href="javascript:;">超链接二</</li>
+  </ul>
+</div>
+
+//为ul绑定冒泡事件
+ul.onclick = function(event){
+	event = event || event = window.event
+	//如果触发事件是期望的元素则执行，否则不执行
+	if(event.target.tagName == "a"){
+	//执行绑定
+	}
+}
+```
+
+##### 4.3 事件绑定 addEventListener()
+
+绑定多个响应函数
+
+> 使用 对象.事件= 函数 的形式
+>
+> - 只能同时为一个元素的一个事件绑定一个响应函数
+>
+> - 不能绑定多个，如果绑定多个，则后面的会覆盖掉前面的
+
+```
+addEventListener() 绑定函数，顺序执行
+参数1：事件的字符串，不要on;
+参数2：回调函数，当事件触发时执行的函数；
+参数3：是否在捕获阶段触发，需要一个boolean值，一般都传false。 //true表示在捕获阶段执行
+```
+
+```
+var btn4_3 = document.getElementById("btn4-3");
+btn4_3.addEventListener("click", function(){
+	console.log("绑定的第1个事件");
+}, false)
+btn4_3.addEventListener("click", function(){
+	console.log("绑定的第2个事件");
+}, false)
+```
+
+
+
+addEventListener() 不支持I8E及以下，可以使用attachEvent()。
+
+```
+attachEvent()
+参数1：事件字符串，要on;
+参数1：funciton(){}。
+
+注意：执行顺序和addEventListener()想反
+```
+
+> addEventListener()中的this是绑定事件的对象；
+>
+>  attachEvent()中的this是window。
+
+```
+//统一两个方法的this
+function bind(obj, eventStr, callback){
+if(obj.addEventListener){
+  //大部分现代浏览器
+  obj.addEventListener(eventStr, callback, false)
+	}else{
+  /* this是谁由调用方式决定；
+  callback.call(obj)
+  */
+  //IE8及以下
+  obj.attachEvent("on"+eventStr, function(){
+    //在匿名函数中调用回调函数
+    callback;
+		})
+	}
+}
+```
+
+
+
+##### 4.4 事件传播
+
+```
+事件传播
+	- 关于时间的传播，网景和微软有不同的理解
+	- 微软认为，事件应该由内而外传播，也就是说事件应该在冒泡阶段执行；
+	- 网景认为，事件应该由外而内，也就是说事件应该先触发最外曾的事件，然后向内传播给后代。
+	- W3C 综合了两家公司防范，将事件传播定义分成了三个阶段
+		1.捕获阶段：从最外层开始向目标元素进行时间的捕获，但不执行触发事件；
+		2.目标阶段：事件捕获到目标元素，捕获结束，开始在目标元素上执行触发事件；
+		3.冒泡阶段：事件从目标元素开始从父节点传递，依次执行触发事件。
+IE8及以下没有捕获阶段
+```
+
+在捕获阶段执行，一般不希望在捕获阶段执行事件
+
+```
+addEventListener("click", function(){}, true);
+```
+
+
+
+##### 4.5 拖拽  
+
+```
+<script>
+  var box_sub = document.getElementById("box4-5-sub");
+    // 1. 开始拖拽
+    box_sub.onmousedown = function(){
+      console.log("开始拖拽");
+      //拖拽左上角偏移问题，指针位置保持不动
+      // 计算鼠标点击坐标距离被拖拽元素的值 clientX-offsetLeft
+      // event = event || window;
+
+      // IE8不起作用，可用element.setCapture()捕获
+      //   - 当调用一个元素的setCapture()后，这个元素将会把下一个鼠标按下的任意事件捕获到自己身上
+      if(box_sub.setCapture()){  //如果IE8则执行
+        box_sub.setCapture()
+      };
+
+      var boxTop = event.clientX - box_sub.offsetLeft;
+      var boxLeft = event.clientY - box_sub.offsetTop;
+      console.log(boxTop, boxLeft);
+      // 2. 移动
+      document.onmousemove = function(){
+        console.log("拖拽ing");
+        var left = event.clientX;
+        var top = event.clientY;
+        console.log(left,top);
+        box_sub.style.marginLeft= (left - boxLeft) + "px";
+        box_sub.style.marginTop = (top - boxTop) + "px";
+      };
+
+      //当鼠标松开时，被拖拽元素停留在当前位置
+      //取消document的onmousemove事件
+      document.onmouseup = function(){
+        document.onmousemove = null;
+        // 取消document.onmouseup事件
+        document.onmouseup = null;
+
+        // 需要在鼠标松开的时候，取消setCapture(),使用 el.releaseCapture();
+        box_sub.releaseCapture();
+      };
+
+      // 当我们拖拽一个网页时，浏览器会默认取搜索引擎搜索该内容
+      // 此时会导致拖拽功能的异常，这个是浏览器提供的默认行为；
+      // 若不希望发生，则可以通过return false来取消默认行为
+      return false;
+      }
+  </script>
+```
+
+
+
+##### 4.6 滚轮事件 onmousewheel
+
+```
+// 火狐不支持，可食用4.3的定义的bind函数；
+var box4_6 = document.getElementById("box4-6");
+box4_6.onmousewheel = function(){
+  // console.log("滚轮动了～～");
+  // 判断滚轮方向
+  // event.wheelDelta; 向上滚是120，向下滚是-120
+  // 火狐使用event.detail; 向上滚是-3，向下滚是3
+  if(event.wheelDelta > 0 || event.detail < 0){
+    console.log("向上滚～～");
+    box4_6.style.width = box4_6.clientWidth - 10 + "px";
+    box4_6.style.height = box4_6.clientHeight - 10 + "px";
+  }else{
+  box4_6.style.width = box4_6.clientWidth + 10 + "px";
+  box4_6.style.height = box4_6.clientHeight + 10 + "px";
+  }
+
+  // 当滚轮滚动时，如果浏览器有滚动条，则滚动条会随之滚动；
+  // 随之滚动是浏览器默认事件，取消则使用 return false;
+  return false;
+  
+  // 火狐使用的是addEventListener()方法绑定，取消默认事件不能用return false;
+  // 需要使用event.preventDefault();
+  event.preventDefault();
+  }
+  
+  bind(box4_6, "DommouseScroll", function(){
+  console.log("[火狐]滚轮动了～～");
+})
+//此处需要两次写滚轮执行事件，可以函数方式调用
+```
+
+
+
+##### 4.7 键盘事件
+
+ 键盘事件一般绑定给可以获取到焦点的对象或document
+
+######  4.7.1 onkeydown
+
+```
+对于onkeydown来说，按着一直不放，则会连续触发；
+当onkeydown连续触发时，第2次和第一次间隔时间稍长，其他会非常快，设计的目标是为了防止误操作；
+```
+
+###### 4.7.2 onkeyup
+
+```
+onkeyuo则不会连续触发
+```
+
+```
+window.onload = function(){
+  document.onkeydown = function(){
+    console.log("我按了键盘");
+    //altKey shiftKey ctrlKey 是否按了alt shift ctrl 键
+    // 获取其他字符通过keycode
+    console.log(event.keyCode);
+
+    //  判断是否按了y键
+    if(event.keyCode === 89){
+   	 console.log("我按了y键");
+    }
+    
+    // 判断是否同时按了某两个键
+    if(event.keyCode === 89 && event.shiftKey){
+    console.log("我同时按了 ctrl + y");
+    }
+
+    // 练习 方向键 移动button
+    var keyEvent2 = document.getElementById("keyEvent-2");
+    var speed = 10;
+    // 按了ctrl 加速
+    if(event.altKey){
+    	speed = 50;
+    }
+    switch(event.keyCode){
+      case 37:
+        console.log("<-");
+        keyEvent2.style.left = (keyEvent2.offsetLeft - speed) + 'px';
+        break;
+      case 38:
+        keyEvent2.style.top = (keyEvent2.offsetTop - speed) + 'px';
+        break;
+      case 39:
+        keyEvent2.style.left = (keyEvent2.offsetLeft + speed) + 'px';
+        break;
+      case 40:
+        keyEvent2.style.top = (keyEvent2.offsetTop + speed) + 'px';
+        break;
+    }
+
+  }
+
+  document.onkeyup = function(){
+  	console.log("我松开了键盘");
+  }
+
+  // 判断input 是否触发键盘事件
+  var keyEvent1 = document.getElementById("keyEvent-1");
+  keyEvent1.onkeydown = function(){
+    console.log("我在input按了键盘");
+    // 在文本框中输入内容，属于onkeydown的默认行为
+    // 如果在onkeydown中取消默认行为，则输入的内容不会出现在文本框中
+    //return false; // 取消默认行为
+
+    // 文本框中不能输入数字，数字keyCode 48~57
+    if(event.keyCode >= 47 && event.keyCode <= 57){
+    	return false;
+    }
+  }
+```
+
+
+
+##### 🌟练习：拖拽
 
 ### 附1 DOM Event
 

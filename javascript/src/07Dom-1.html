@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dom拖拽</title>
+  <style>
+    button{border:none;padding:6px 15px;}
+    a{cursor:pointer;}
+    .dom{width:600px;height:auto;padding:20px;border:1px solid #999;display:flex;font-size:13px;float:left;margin-right:20px;}
+    .dom p{height:14px;line-height:14px;}
+    .dom-item{flex:1;}
+    ul,li{list-style-type:none;margin:0;padding:0;}
+    .item,ul{width:100%;}
+    .item,ul,ul li{float:left;}
+    .item ul li{padding:3px 6px;margin-right:10px;background:#0084ff;color:#fff;}
+    label{width:100%;display:block;}
+    button{display:block;margin-bottom:5px;}
+    .focus p,.focus .btn{text-align:center;}
+    .focus b{margin:0 3px;}
+    .focus img{width:250px;height:250px;border:1px solid #f2f2f2;}
+    .focus .btn button{margin:0 auto;display:inline;background:#0084ff;color:#fff;}
+    table{border-collapse: collapse;}
+    table td,table th{border:1px solid #f2f2f2;padding:6px 10px;}
+    form{padding:10px;border:1px solid #f2f2f2;}
+    label{margin:5px auto;text-align:center;}
+    table a{color:#0084ff;}
+
+    .box{width:100px;height:100px;background:#f00;border:5px solid #ffc107;margin:5px;padding:10px;box-shadow:0 5px 10px #333;overflow:auto;}
+    .box1-1{width:50px;height:150px;background:#fba;}
+
+    .box-mouse,.box-mouse-text{width:300px;border:1px solid #999;}
+    .box-mouse{height:50px;}
+    .box-mouse-text{height:30px;}
+
+    .box-move{width:100px;height:100px;background:#f00;}
+  </style>
+  <script>
+    // window.onload = function(){
+    //   alert("页面加载完成后执行");
+    // }
+  </script>
+</head>
+<body>
+  <div id="box4-5-sub"  style="width:50px;height:50px;display:inline-block;background:#fba;">
+  </div>
+  <!-- <div id="box4-5" style="width:60px;height:60px;position:absolute;left:100px;top:100px;background:#0084ff;">
+  </div> -->
+  <script>
+    // 4.5 拖拽
+    // 拖拽流程
+    //   1.当鼠标在被拖拽元素上按下时，开始拖拽 onmousedown
+    //   2.当鼠标移动时被拖拽元素跟随鼠标移动 onmousemove
+    //   3.当鼠标松开时，被拖拽元素固定在当前位置 onmouseup
+
+    var box_sub = document.getElementById("box4-5-sub");
+    // 1. 开始拖拽
+    box_sub.onmousedown = function(){
+      console.log("开始拖拽");
+      //拖拽左上角偏移问题，指针位置保持不动
+      // 计算鼠标点击坐标距离被拖拽元素的值 clientX-offsetLeft
+      // event = event || window;
+
+      // IE8不起作用，可用element.setCapture()捕获
+      //   - 当调用一个元素的setCapture()后，这个元素将会把下一个鼠标按下的任意事件捕获到自己身上
+      if(box_sub.setCapture()){  //如果IE8则执行
+        box_sub.setCapture()
+      };
+
+      var boxTop = event.clientX - box_sub.offsetLeft;
+      var boxLeft = event.clientY - box_sub.offsetTop;
+      console.log(boxTop, boxLeft);
+      // 2. 移动
+      document.onmousemove = function(){
+        console.log("拖拽ing");
+        var left = event.clientX;
+        var top = event.clientY;
+        console.log(left,top);
+        box_sub.style.marginLeft= (left - boxLeft) + "px";
+        box_sub.style.marginTop = (top - boxTop) + "px";
+      };
+
+      //当鼠标松开时，被拖拽元素停留在当前位置
+      //取消document的onmousemove事件
+      document.onmouseup = function(){
+        document.onmousemove = null;
+        // 取消document.onmouseup事件
+        document.onmouseup = null;
+
+        // 需要在鼠标松开的时候，取消setCapture(),使用 el.releaseCapture();
+        box_sub.releaseCapture();
+      };
+
+      // 当我们拖拽一个网页时，浏览器会默认取搜索引擎搜索该内容
+      // 此时会导致拖拽功能的异常，这个是浏览器提供的默认行为；
+      // 若不希望发生，则可以通过return false来取消默认行为
+      return false;
+    }
+  </script>
+</body>
+</html>

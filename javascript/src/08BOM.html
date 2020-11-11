@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOM</title>
+  <style>
+    *{margin:0;padding:0;}
+    .img img{width:100px;}
+    .dom{width:100%;height:100px;float:left;}
+    .dom p{float:left;}
+
+    .box-style-1{width:50px;height:50px;background:#f00;}
+    .box-style-2{width:100px;height:100px;background:#ff0;}
+  </style>
+</head>
+<script>
+// browser 浏览器对象模型，通过js操作浏览器对象
+
+// ### 1 BOM对象
+//  - Window - 代表整个浏览器的窗口，同时window也是网页中的全局对象；
+//  - Navigator - 代表当前浏览器的信息，通过该对象来识别不同的浏览器；
+//  - Location - 代表当前浏览器的地址栏信息；
+//  - History - 代表浏览器的历史记录，可以通过该对象来操作浏览器的历史记录
+//     - 由于隐私的原因，该对象不能获取到具体的历史记录，只能操作浏览器的前进/后退；
+//     - 而且只能操作档次当次的历史记录
+//  - Screen - 代表用户的屏幕信息，通过该对象可以获取到该用户的显示器相关信息。
+// window是全局对象，Navigator,Location,History,Screen作为window对象的属性保存
+
+console.log(window);
+console.log(navigator);
+console.log(location);
+console.log(history);
+console.log(screen);
+
+// 2 navigator
+// 浏览器的信息
+// 由于历史原因，navigator对象中的大部分对象属性已经不能帮助我们识别浏览器信息了
+console.log(navigator.appName);  // 浏览器名称
+
+// 2.1 navigator.userAgent
+// - 目前有用的判断浏览器信息
+// - userAgent是一个字符串，描述浏览器的信息
+// - ie11去掉了微软和IE相关信息，不能通过userAgent来判断
+var ua = navigator.userAgent;
+console.log(ua);  //浏览器信息
+//输出结果：Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36
+if(/chrome/i.test(ua)){
+  console.log("我是Chrome浏览器");
+}else if(/firefox/i.test(ua)){
+  console.log("我是Firefox浏览器");
+}else if(/msie/i.test(ua)){ // 支持IE8，9，10，不支持IE11
+  console.log("我是IE(6~10)浏览器");
+}else if("ActiveXObject" in window){
+  console.log("我是IE11浏览器");
+}
+// console.log(window.ActiveXObject); //IE特有的构造函数
+
+// 3 history
+//  对象可以操作浏览器向前/向后
+// 对象属性 length
+// 对象方法 forword back go
+console.log(history.length);
+
+window.onload = function(){
+  var btnBack = document.getElementById("btn-back");
+  btnBack.onclick = function(){
+    history.back();
+    //history.go(param)
+    // 参数是整数，表示前进或者后退页面的个数
+    history.go(1); //向前跳转一个页面
+  }
+
+  // 5.1 setInterval
+  var num = document.getElementById("num");
+  var i = 0;
+  var count = setInterval(function(){
+    num.innerText = i++;
+    if(i==5){
+      clearInterval(count);
+    }
+  },1000);
+
+  //图片切换练习
+  // 1.获取img标签
+  var img1 = document.getElementById("imgArr");
+  // 2.创建数组来保存切换的图片路径
+  var imgArr= ["images/1.jpg", "images/2.jpg", "images/3.jpg", "images/4.jpg", "images/5.jpg"];
+  console.log(imgArr.length);
+  // 3.创建变量用来保存当前图片的索引
+  var imgIndex = 0;
+  // 变量保存定时器
+  var timer;
+
+  // 点击开始按钮图片开始切换
+  var imgBtnStar = document.getElementById("img-star");
+  imgBtnStar.onclick = function(){
+    // 开启定时器自动切换图片
+    // 每点击一次，就会开启一个定时器，timer保存的永远是最后一个；
+    // 多次点击会造成切换变快
+    // 开启新的定时器之前，须关闭当前元素上的其他定时器
+    clearInterval(timer);
+    timer = setInterval(function(){
+    imgIndex++;
+    // if(imgIndex>=imgArr.length){
+    //   imgIndex = 0;
+    // }
+    //改进写法
+    imgIndex %= imgArr.length
+    img1.src = imgArr[imgIndex];
+    },1000)
+  }
+
+  var imgBtnStop = document.getElementById("img-stop");
+  imgBtnStop.onclick = function(){
+    clearInterval(timer);
+  }
+
+  // 4.7.2练习 方向键 移动button
+  // 定时器解决第1.2次间隔卡顿，onkeydown同时控制方向和速度
+  var keyEvent2 = document.getElementById("keyEvent-1");
+  var speed = 10;
+  // 没有了键盘事件，需创建变量保存方向
+  var dir = 0;
+
+  setInterval(function(){
+    switch(dir){
+      case 37:
+        console.log("<-");
+        keyEvent2.style.left = (keyEvent2.offsetLeft - speed) + 'px';
+        break;
+      case 38:
+        keyEvent2.style.top = (keyEvent2.offsetTop - speed) + 'px';
+        break;
+      case 39:
+        keyEvent2.style.left = (keyEvent2.offsetLeft + speed) + 'px';
+        break;
+      case 40:
+        keyEvent2.style.top = (keyEvent2.offsetTop + speed) + 'px';
+        break;
+    }
+  },50);
+
+  // 绑定按键的值
+  document.onkeydown = function(){
+    if(event.altKey){
+      speed = 50;
+    }else{
+      speed = 10;
+    }
+
+    // dir值
+    dir = event.keyCode;
+
+    // 当按键松开时时，不再移动
+    document.onkeyup = function(){
+      dir = 0;
+    }
+
+  }
+
+
+// 4 location
+//  该对象封装了浏览器地址栏的信息
+// 如果直接将location属性修改为一个完整的路径或者相对路径
+// 则页面会跳转到该路径，并产生响应的history
+// 对象属性 hash host hostname href pathname port protocol search
+// 对象方法 assign() reload() replace() toString()
+console.log(location);
+// 修改location
+// locaton = "http://www.baidu.com"
+
+// 4.1 assign()
+  // - 用来跳转到其他页面，作用和直接修改location一样
+  // location.assign("http://www.baidu.com");
+
+  // 4.2 reload
+  // - 用于重新加载页面，作用和刷新一样
+  // - 方法中参数为true，则会强制刷新
+  // location.reload(true);
+
+  // 4.3 replace()
+    // - 替换新的URL页面，不能生成历史记录，无法回退
+  // location.replace(url);
+
+  // 5 window对象方法
+  // 5.1 setInterval() 定时调用
+    // - 可以将一个函数每隔一段时间执行一次
+    // - 参数：
+    //   1.回调函数，每隔一段时间执行的函数；
+    //   2.每次调用间隔的时间，单位毫秒；
+    //  - 返回值：
+    //    1.返回一个number类型的数据;
+    //    2.返回的数字代表定时器的唯一标识；
+
+    var index = setInterval(function(){
+
+    },1000);
+    console.log(index);
+  // 5.2 关闭定时器
+  // clearInterval();
+  // 练习 切换图片  见 line:110-151
+
+  // 5.3 setTimeout()
+  // 延时调用：不马上执行，间隔一段时间后执行，而且只执行一次
+  // 延时调用和定时调用实际上可以相互代替
+  var num = 100;
+  setTimeout(() => {
+    console.log(num++);
+  }, 3000);
+  // 5.4 clearTimeout(timer);
+
+  // 5.5 定时器的应用
+  // 5.5.1 点击按钮后向右持续移动div
+  // function getStyle(obj,name){
+  //   if(window.getComputedStyle){
+  //     return getComputedStyle(obj,null)[name];
+  //   }else{
+  //     return obj.currentStyle[name]; //ie8
+  //   }
+  // }
+  var btn2 = document.getElementById("btn2");
+  var box2 = document.getElementById("keyEvent-2");
+  var timer2; // 定时器标识
+  var moveRightSpeed = 11;
+  btn2.onclick = function(){
+    // move(box2, 800, 10);
+    console.log("按了移动按钮");
+     //关闭上一个定时器
+     clearInterval(timer2);
+     timer2 = setInterval(function(){
+      // 在原来的偏移基础上向右偏移
+      //var oldLeft = box2.offsetLeft;
+      var oldLeft = parseInt(getComputedStyle(box2).left);
+      console.log(oldLeft);
+      var newLeft = oldLeft + moveRightSpeed;
+      console.log(newLeft);
+      if(newLeft > 800){
+        newLeft = 800;
+      }
+      box2.style.left = newLeft + "px";
+      // 当left移动到800px时，停止移动
+      if(newLeft == 800){
+        clearInterval(timer2);
+      }
+    },30);
+  }
+
+  // 5.5.2 点击按钮后想左持续移动div
+  var btn3 = document.getElementById("btn3");
+  //var timer2; // 定时器标识
+  var moveLeftSpeed = 20;
+  btn3.onclick = function(){
+    //move(box2, 0, 10);
+    console.log("按了移动按钮");
+    //关闭上一个定时器
+    clearInterval(timer2);
+     timer2 = setInterval(function(){
+      // 在原来的偏移基础上向右偏移
+      //var oldLeft = box2.offsetLeft;
+      var oldLeft = parseInt(getComputedStyle(box2).left);
+      console.log(oldLeft);
+      var newLeft = oldLeft - moveLeftSpeed;
+      console.log(newLeft);
+      if(newLeft <= 0){
+        newLeft = 0;
+      }
+      box2.style.left = newLeft + "px";
+      // 当left移动到800px时，停止移动
+      if(newLeft == 0){
+        // 通过class间接修改元素样式
+        clearInterval(timer2);
+      }
+    },30);
+  }
+
+  var btn4 = document.getElementById("btn4");
+  btn4.onclick = function(){
+    //move(box2, "width", 30, 300,function(){});
+    move(box2, "top", 30, 300,function(){
+      move(box2, "width", 30, 300,function(){
+        move(box2, "height", 30, 100,function(){
+          
+        });
+      });
+    });
+  }
+
+  //5.5.1 5.5.2 代码重复太多；定义成函数
+  //参数：
+  // 1.对象
+  // 2.方向
+  // 3.速度（正负方向）
+  // 4.动画结束位置
+  // 5.回调函数，执行结束后执行的函数
+  function move(obj, attr, speed, dir, callback){
+    clearInterval(timer2);
+    obj.timer2 = setInterval(function(){
+      // 获取元素当前所处位置
+      var info = getComputedStyle(obj,null)[attr];
+      var oldLeft = parseInt(info);
+      console.log(info);
+      //判断speed正负
+      // 小于dir,向右移动，大于向左移动
+      if(oldLeft > dir){
+        speed = -speed;
+      }
+      var newLeft = oldLeft + speed;
+      console.log(newLeft);
+      //向左移动，需要判断newLeft是否小于dir
+      if( (speed < 0 && newLeft < dir) || (speed > 0 && newLeft >dir)){
+        newLeft = dir;
+      }
+      box2.style[attr] = newLeft + "px";
+      // 当移动到dir目标位置时，停止移动
+      if(newLeft == dir){
+        clearInterval(timer2);
+        callback && callback(); //定时器执行完后执行回调函数
+      }
+    },30);
+  }
+
+  // 5.5.3 
+  var btn5 = document.getElementById("btn5");
+  var box5 = document.getElementById("keyEvent-5");
+  btn5.onclick = function(){
+    // 通过改变class间接修改元素
+    // box5.className = "box-style-2";
+    // 拼加class，而不是替换
+    // box5.className += " box-style-2"; //注意有空格
+     addClass(box5, "box-style-2");
+     removeClass(box5, "box-style");
+     toggleClass(box5, "box-style-toggle");
+  }
+
+  // 定义一个函数，来向元素添加指定class属性值
+  // 参数：
+  // obj: 添加的目标元素
+  // myClassName:添加的class值
+  function addClass(obj, myClassName){
+    if(!hasClass(obj, myClassName)){
+      obj.className += " " + myClassName;
+    }
+  }
+  // 判断元素中是否有指定class
+  // 如果有返回true，没有返回false
+  function hasClass(obj, myClassName){
+    // 获取obj已有的class数组
+    console.log(myClassName);
+    //var regExp = /\bmyClassName\b/;
+    var reg = new RegExp("\\b"+myClassName+"\\b");
+    // console.log(reg.test(obj.className));
+    return reg.test(obj.className);
+  }
+
+  function removeClass(obj, myClassName){
+    var reg = new RegExp("\\b"+myClassName+"\\b");
+    obj.className = obj.className.replace(reg, "");
+  }
+
+  function toggleClass(obj, myClassName){
+    if(hasClass(obj, myClassName)){
+      removeClass(obj, myClassName);
+    }else{
+      addClass(obj, myClassName)
+    }
+  }
+}
+
+</script>
+<body>
+  <input type="button" value ="btn-back" id="btn-back">
+  <input type="text" name="" id="">
+  <h2 id="num"></h2> <!-- setInterval()设置执行时间 -->
+  <div class="img">
+    <input type="button" value="开始" id="img-star">
+    <input type="button" value="停止" id="img-stop">
+    <img src="images/1.jpg" alt="" id="imgArr">
+  </div>
+  <div class="dom" style="position:relative">
+    <p>移动div定时器</p>
+    <div id="keyEvent-1" style="width:50px;height:50px;background:#f00;position:absolute;top:20px;left:20px;"></div>
+  </div>
+
+  <div class="dom" style="position:relative">
+    <p>5.5.1 点击按钮后移动div</p><br>
+    <input type="button" value="向右持续移动" id="btn2">
+    <input type="button" value="向左持续移动" id="btn3">
+    <input type="button" value="变宽" id="btn4"><br><br>
+    <div id="keyEvent-2" style="width:50px;height:50px;background:#f00;position:absolute;top:50px;left:0px;"></div>
+  </div>
+
+  <div class="dom" style="position:relative">
+    <p>5.5.3 点击按钮修改样式</p><br>
+    <input type="button" value="改变样式" id="btn5"><br><br>
+    <div id="keyEvent-5" class="box-style box-style-1"></div>
+  </div>
+</body>
+</html>
