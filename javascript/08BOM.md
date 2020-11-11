@@ -354,7 +354,7 @@ function move(obj, attr, speed, dir, callback){
 }
 ```
 
-######  定义函数，修改class
+######  定义函数，修改class
 
 ```
 // 定义一个函数，来向元素添加指定class属性值
@@ -391,5 +391,173 @@ function toggleClass(obj, myClassName){
 		addClass(obj, myClassName)
 	}
 }
+```
+
+###### 菜单展开收起
+
+```
+<div class="nav">
+  <div class="nav-item"> <!-- slideDown展开 -->
+    <span class="nav-span">Apple</span>
+    <a href="#">Mac</a>
+    <a href="#">iPhone</a>
+    <a href="#">iPad</a>
+    <a href="#">Watch</a>
+    <a href="#">Music</a>
+  </div>
+  <div class="nav-item">
+    <span class="nav-span">Google</span>
+    <a href="#">Google Search</a>
+    <a href="#">YouTube</a>
+    <a href="#">Chrome</a>
+    <a href="#">Android</a>
+  </div>
+  <div class="nav-item">
+    <span class="nav-span">Adobe</span>
+    <a href="#">Photoshop</a>
+    <a href="#">illusrator</a>
+    <a href="#">Dreamweave</a>
+    <a href="#">Acrobat</a>
+  </div>
+</div>
+
+<style>
+body{color:#2B3E51;}
+a{text-decoration:none;}
+.nav{width:150px;display:inline-block;background:#f2f2f2;border-radius:3px;overflow: hidden;}
+.nav-item{width:100%;float:left;}
+.nav-item span,.nav-item a{display:inline-block;width:calc(100% - 20px);padding:2px 10px;}
+.nav-item span{background:#098AFF;color:#fff;}
+.nav-item a{color:inherit;font-size:14px;display:none;}
+.nav-item a:hover{color:#098AFF;}
+.slideDown a{display:block;}
+</style>
+```
+
+```
+<script src="./tools.js"></script>
+<script>
+window.onload = function(){
+  // 绑定单击事件
+  var spanList = document.querySelectorAll(".nav-span");
+  
+  // 定义变量保存打开的菜单
+  var openDiv;
+  
+  // 为以及菜单span绑定点击响应函数
+  for(var i=0; i<spanList.length; i++){
+  	spanList[i].onclick = function(){
+  	// 获取当前span的父元素
+  	var parentDiv = this.parentNode;
+
+  	// 切换前高度
+  	var starHeight = parentDiv.offsetHeight;
+  	console.log(starHeight);
+
+  	toggleClass(parentDiv, "slideDown");
+
+  	// 切换后高度
+  	var endHeight = parentDiv.offsetHeight;
+  	console.log(endHeight);
+
+  	// 将切换后的高度设置为开始大小
+  	parentDiv.style.height = starHeight + "Px";
+  	// 调用move函数
+  	move(parentDiv, "height", 20, endHeight, function(){
+  	//删除动画执行完后的内连样式
+  		parentDiv.style.height = "";
+  	});
+
+  	// 判断openDiv是否是同一个菜单
+  	// 打开当前的菜单，需关闭之前打开的菜单
+
+  	// 修改openDiv 为打开的菜单
+  	openDiv = parentDiv;
+  	console.log(openDiv);
+  	}
+  }
+}
+</script>
+```
+
+### 6 JSON
+
+```
+JSON JavaScript Object Notation JS对象表示法
+- JS 中对象只认识自己，其他语言不认识；
+- JSON 就是一个特殊格式的字符串，这个字符串可以被任意语言识别；
+				在开发中主要用来数据交换
+JSON字符串中属性名必须加双引号；
+
+JSON 分类
+- 1.对象{} var json = '{"name":"孙悟空", "age":18, "sex": "F"}';
+- 2.数组[] var json = '[1,2,3,"孙悟空",18,"F"]';
+
+JSON 中允许的值
+- 1.字符串
+- 2.数值
+- 3.布尔值
+- 4.null
+- 5.对象
+- 6.数组
+
+
+
+```
+
+##### 6.1 JSON.parse()
+
+```
+JSON字符串转为JS对象
+- JSON.parse(); 转化为js对象
+
+// 代码
+var json = '{"name":"孙悟空", "age":18, "sex": "F"}';
+console.log(typeof json); // string
+var obj = JSON.parse(json);
+console.log(typeof obj);  // object
+console.log(obj.name);  // 孙悟空
+
+
+```
+
+ 
+
+##### 6.2  JSON.stringify()
+
+```
+JS对象转为JSON字符串
+- JSON.stringify();
+
+// 代码
+var js2 = {name:"孙悟空", age:18, sex: "F"}
+var str = JSON.stringify(js2);
+console.log(str);
+console.log(typeof str);  // string
+```
+
+
+
+##### 6.3 Eval()
+
+**JSON对象不支持IE7及以下**
+
+执行性能差，在网络中有安全隐患，尽量不使用
+
+如需引用，则可以通过<script src="json2.js">外部JS文件的方式来处理
+
+```
+eval()
+	- 这个函数可以用来执行一段字符串形式的JS代码，并将执行结果返回
+	- 如果使用eval()执行的字符串中如果含有{},他会将{}当成代码块
+		如果不希望当成代码块，则需要在字符串前后各加()
+```
+
+```
+// ie7及以下
+var json = '{"name":"孙悟空", "age":18, "sex": "F"}';
+var obj2 = eval("("+ json + ")");
+console.log(obj2); 
+console.log(typeof obj2);  // object
 ```
 
