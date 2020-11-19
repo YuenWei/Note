@@ -1,4 +1,4 @@
-### v-model的基本使用
+### 1 v-model的基本使用
 
 v-model双向绑定，既输入框的value改变，对应的message对象值也会改变，修改message的值，input的value也会随之改变。无论改变那个值，另外一个值都会变化。
 
@@ -18,7 +18,7 @@ v-model双向绑定，既输入框的value改变，对应的message对象值也�
   </script>
 ```
 
-### v-model原理
+### 2 v-model原理
 
 `v-model = v-bind + v-on`，实现双向绑定需要是用v-bind和v-on，使用v-bind给input的value绑定message对象，此时message对象改变，input的值也会改变。但是改变input的value并不会改变message的值，此时需要一个v-on绑定一个方法，监听事件，当input的值改变的时候，将最新的值赋值给message对象。`$event`获取事件对象，target获取监听的对象dom，value获取最新的值。
 
@@ -54,7 +54,7 @@ v-model双向绑定，既输入框的value改变，对应的message对象值也�
   </script>
 ```
 
-### v-model结合radio
+### 3 v-model结合radio
 
  radio单选框的`name`属性是互斥的，如果使用v-model，可以不使用`name`就可以互斥。
 
@@ -83,7 +83,7 @@ v-model绑定`sex`属性，初始值为“男”，选择女后`sex`属性变成
   </script>
 ```
 
-### v-model结合checkbox
+### 4 v-model结合checkbox
 
 checkbox可以结合v-model做单选框，也可以多选框。
 
@@ -129,7 +129,7 @@ checkbox可以结合v-model做单选框，也可以多选框。
 </body>
 ```
 
-### v-model结合select
+### 5 v-model结合select
 
  v-model结合select可以单选也可以多选`multiple`。
 
@@ -166,7 +166,7 @@ checkbox可以结合v-model做单选框，也可以多选框。
 </body>
 ```
 
-### v-model的修饰符
+### 6 v-model的修饰符
 
 1. `lazy`默认情况下是实时更新数据，加上`lazy`，从输入框失去焦点，按下enter都会更新数据。
 2. `number`,默认是string类型，使用`number`复制为number类型。
