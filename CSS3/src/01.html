@@ -4,8 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>
+    .item{width:100%;float:left;}
+    .gradient{width:300px;height:100px;float:left;margin-right:50px;margin-bottom:20px;}
+    .gradient{background-image:linear-gradient(#f00, #ff0)}
+    .gradient-2{background-image:linear-gradient(to top right,#f00, #ff0)}
+    .gradient-3{background-image:linear-gradient(-90deg, #f00, #ff0)}
+    .gradient-4{background-image:linear-gradient(#f00, #ff0 50%)}
+    .gradient-5{background-image:linear-gradient(rgba(255,0,0,0), rgba(255,0,0,1))}
+    .gradient-6{background-image:repeating-linear-gradient(#f00, #ff0 12.5%, #0f0 25%)}
+    .gradient-7{background-image:repeating-linear-gradient(45deg, #f00, #ff0 12.5%, #0f0 25%)}
+  </style>
 </head>
 <body>
-  
+  <h2>线性渐变(红到黄)</h2>
+  <div class="item">
+    <div class="gradient"><span>默认渐变</span></div>
+    <div class="gradient gradient-2"><span>方向渐变:到右上角</span></div>
+    <div class="gradient gradient-3"><span>角度渐变:-90deg(从右到左)</span></div>
+    <div class="gradient gradient-4"><span>渐变:自定义位置</span></div>
+    <div class="gradient gradient-5"><span>透明渐变</span></div>
+    <div class="gradient gradient-6"><span>重复渐变</span></div>
+    <div class="gradient gradient-7"><span>重复渐变+角度</span></div>
+  </div>
+  <h2>径向渐变(红到黄)</h2>
+  <div class="item">
+    <div class="radial"><span>默认渐变</span></div>
+  </div>
 </body>
 </html>
