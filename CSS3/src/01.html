@@ -14,6 +14,20 @@
     .gradient-5{background-image:linear-gradient(rgba(255,0,0,0), rgba(255,0,0,1))}
     .gradient-6{background-image:repeating-linear-gradient(#f00, #ff0 12.5%, #0f0 25%)}
     .gradient-7{background-image:repeating-linear-gradient(45deg, #f00, #ff0 12.5%, #0f0 25%)}
+    
+    .radial{width:300px;height:100px;float:left;margin-right:50px;margin-bottom:20px;}
+    .radial{background-image:radial-gradient(#f00, #ff0)}
+    .radial-2{background-image:radial-gradient(#f00 15%, #ff0 60%)}
+    .radial-3{background-image:radial-gradient(circle, #f00, #ff0)}
+    .radial-4{background-image:radial-gradient(closest-side at 60% 30%, #f00, #ff0, #0f0)}
+    .radial-5{background-image:radial-gradient(ellipse closest-side, #f00, #ff0 10%, #0f0 50%, #00f)}
+
+    .transform, .transition{width:150px;height:150px;padding:10px;margin-right:50px;float:left;background:#f00;font-size:14px;color:#fff;}
+
+    .transition{transition:width 2s;}
+    .transition:hover{width:300px;}
+    .transition-2{transition: width 2s, height 3s,transform 3s;}
+    .transition-2:hover{width:300px;height:100px;transform:rotate(45deg) scale(1.5);}
   </style>
 </head>
 <body>
@@ -30,6 +44,29 @@
   <h2>径向渐变(红到黄)</h2>
   <div class="item">
     <div class="radial"><span>默认渐变</span></div>
+    <div class="radial radial-2"><span>色节点不均匀分布</span></div>
+    <div class="radial radial-3"><span>设置形状-默认ellipse椭圆</span></div>
+    <div class="radial radial-4"><span>不同尺寸</span></div>
+    <div class="radial radial-5"><span>方向</span></div>
+  </div>
+  <h2>文本效果</h2>
+  <div class="item">
+    <span style="text-shadow: 2px 5px 3px #f00">Text-shaodw</span>
+  </div>
+  <h2>转换</h2>
+  <div class="item">
+    <div class="transform">默认width:150px;height:150px;</div>
+    <div class="transform" style="transform:translate(50px, 50px)">transform:translate(50px, 50px)</div>
+    <div class="transform" style="transform:rotate(45deg)">transform:rotate(45deg)</div>
+    <div class="transform" style="transform:scale(0.9, 0.5)">transform:scale(0.9, 0.5)</div>
+    <div class="transform" style="transform:skew(45deg)">transform:skew(45deg),第2个参数默认为0</div>
+    <div class="transform" style="transform:skew(45deg, -45deg)">transform:skew(45deg, 45deg)</div>
+    <div class="transform" style="transform:matrix(0.8, 0.5, -0.5, 0.5, 0, 0)">transform:skew(45deg, 45deg)</div>
+  </div>
+  <h2>转换</h2>
+  <div class="item">
+    <div class="transition"></div>
+    <div class="transition transition-2"></div>
   </div>
 </body>
 </html>
