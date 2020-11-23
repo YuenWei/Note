@@ -6,6 +6,10 @@
   <title>Document</title>
   <style>
     .item{width:100%;float:left;}
+
+    /* div{width:100px;height:100px;background:#f00;display:none;}
+    :target{display:block;} */
+
     .gradient{width:300px;height:100px;float:left;margin-right:50px;margin-bottom:20px;}
     .gradient{background-image:linear-gradient(#f00, #ff0)}
     .gradient-2{background-image:linear-gradient(to top right,#f00, #ff0)}
@@ -31,6 +35,15 @@
   </style>
 </head>
 <body>
+  <h2>选择器</h2>
+  
+    <a href="#div1">Tab1</a>
+    <a href="#div2">Tab2</a>
+    <a href="#div3">Tab3</a>
+    <div  id="div1">Tab1-con</div>
+    <div  id="div2">Tab1-con</div>
+    <div  id="div3">Tab1-con</div>
+  
   <h2>线性渐变(红到黄)</h2>
   <div class="item">
     <div class="gradient"><span>默认渐变</span></div>
@@ -63,7 +76,7 @@
     <div class="transform" style="transform:skew(45deg, -45deg)">transform:skew(45deg, 45deg)</div>
     <div class="transform" style="transform:matrix(0.8, 0.5, -0.5, 0.5, 0, 0)">transform:skew(45deg, 45deg)</div>
   </div>
-  <h2>转换</h2>
+  <h2>过渡</h2>
   <div class="item">
     <div class="transition"></div>
     <div class="transition transition-2"></div>
