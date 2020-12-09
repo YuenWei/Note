@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    .item{width:100%;float:left;}
+    .item{width:100%;display:inline-block;}
+    h2{margin-bottom:0;}
+    p{color:#999;font-size:13px;margin-top:4px;}
 
     /* div{width:100px;height:100px;background:#f00;display:none;}
     :target{display:block;} */
@@ -26,12 +28,131 @@
     .radial-4{background-image:radial-gradient(closest-side at 60% 30%, #f00, #ff0, #0f0)}
     .radial-5{background-image:radial-gradient(ellipse closest-side, #f00, #ff0 10%, #0f0 50%, #00f)}
 
+    /* 练习 */
+    .wrap{width:50px;height:300px;}
+    .gradient-8{width:100%;height:100%;background-image:repeating-linear-gradient(30deg, #1E00FB 0px,  #1E00FB 15px,#fff 15px, #fff 30px, #DF0F00 30px, #DF0F00 45px, #fff 45px, #fff 60px)}
+
     .transform, .transition{width:150px;height:150px;padding:10px;margin-right:50px;float:left;background:#f00;font-size:14px;color:#fff;}
 
     .transition{transition:width 2s;}
     .transition:hover{width:300px;}
     .transition-2{transition: width 2s, height 3s,transform 3s;}
     .transition-2:hover{width:300px;height:100px;transform:rotate(45deg) scale(1.5);}
+
+    .div1-1,.div1-2{width:50px;height:50px;background:#f00;margin-bottom:20px;transition:.5s;}
+    .item-group:hover .div1-1{transform:translate(100px) scale(0.5)}
+    .item-group:hover .div1-2{transform:scale(0.5) translate(100px)}
+    
+    .item-3d{transform-style: preserve-3d;-webkit-perspective:300;}
+    .trans-3d-1,.trans-3d-2,.trans-3d-3,.trans-3d-4{width:100px;height:100px;margin:10px;border-radius:50%;font-size:12px;color:#fff;line-height:100px;background:#f00;text-align:center;transition:2s;display:inline-block;}
+    .trans-3d-1:hover{transform:rotateX(360deg);}
+    .trans-3d-2:hover{transform:rotateY(360deg)}
+    .trans-3d-3:hover{transform:rotateZ(360deg)}
+    .trans-3d-4:hover{transform:rotate3d(1,1,1,360deg);transform-style:preserve-3d;}
+    
+    /* 3D舞台 */
+    .box-wrap{width:100px;height:100px;transform-style:preserve-3d;perspective:100px;}
+    /* 正方体盒子 */
+    .box{width:100px;height:100px;position:relative;transform-style:preserve-3d;transform-origin: center center -50px;transition:5s;}
+    /* 正方体盒子的6面 */
+    .box .box-item{width:100px;height:100px;text-align:center;line-height:100px;background:rgba(255,0,0,.4);position:absolute;border:1px dotted #8e0202;box-sizing: border-box;}
+    /* 背景是否可见 */
+    /* .box .box-item{backface-visibility: hidden;} */
+    /* 上面：以X轴为基点，顶部往后推90度 */
+    .box-top{top:-100px;transform-origin:bottom;transform:rotateX(90deg)}
+    /* 下面：以X轴为基点，低部往后推90度 */
+    .box-bottom{bottom:-100px;transform-origin:top;transform:rotateX(-90deg);}
+    /* 左侧面：以Y轴为基点，左边往后推90度 */
+    .box-left{left:-100px;transform-origin:right;transform:rotateY(-90deg)}
+    /* 右侧面：以Y轴为基点，右边往后推90度 */
+    .box-right{left:100px;transform-origin:left;transform:rotateY(90deg)}
+    /* 前面：以Z轴为基点，后移100px */
+    .box-before{left:100px;transform-origin:center;transform:translateX(-100px) translateZ(-100px) rotateX(180deg)}
+    
+    .box-wrap:hover .box{transform:rotateX(360deg);}
+
+    /* 正方体改进 */
+    /* 3D舞台 */
+    .box-wrap-2{width:100px;height:100px;transform-style:preserve-3d;perspective:100px;}
+    /* 正方体盒子 */
+    .box-2{width:100px;height:100px;position:relative;transform-style:preserve-3d;transform-origin: center center -50px;transition:5s;}
+    /* 正方体盒子的6面，改进-以正方体中心为基点 */
+    .box-2 .box-2-item{width:100px;height:100px;text-align:center;line-height:100px;background:rgba(255,0,0,.4);position:absolute;border:1px dotted #8e0202;box-sizing: border-box;transform-origin:center center -50px;}
+
+    /* 上面：以正方体中心为基点，顶部往后推90度 */
+    .box-2-top{transform:rotateX(90deg)}
+    /* 下面：以正方体中心为基点，低部往后推90度 */
+    .box-2-bottom{transform:rotateX(-90deg)}
+    /* 左侧面：以正方体中心为基点，左边往后推90度 */
+    .box-2-left{transform:rotateY(-90deg);}
+    /* 右侧面：以正方体中心为基点，右边往后推90度 */
+    .box-2-right{transform:rotateY(90deg);}
+    /* 前面：以正方体中心为基点，后移100px */
+    .box-2-before{transform:rotateX(180deg);}
+
+    .box-wrap-2:hover .box-2{transform:rotateX(360deg);}
+
+
+    /* 三棱柱 */
+    /* 3D舞台 */
+    .box-wrap-3{width:100px;height:100px;transform-style:preserve-3d;perspective:100px;}
+    /* 正方体盒子 */
+    .box-3{width:100px;height:100px;position:relative;transform-style:preserve-3d;transform-origin: center center -28.8675px;;transition:5s;}
+    /* 正方体盒子的6面，改进-以正方体中心为基点 */
+    .box-3>div{width:100px;height:100px;text-align:center;line-height:100px;background:rgba(255,0,0,.4);position:absolute;border:1px dotted #8e0202;box-sizing: border-box;transform-origin:center center -28.8675px;}
+    .box-3>div:nth-child(2){transform:rotateY(120deg);}
+    .box-3>div:nth-child(3){transform:rotateY(240deg);}
+    .box-wrap-3:hover .box-3{transform:rotateY(360deg);}
+
+
+    /* 多棱柱 */
+    /* 3D舞台 */
+    .box-wrap-4{width:100px;height:100px;margin-left:50px;transform-style:preserve-3d;perspective:100px;}
+    /* 只有transform有过渡 */
+    .box-4{width:100px;height:100px;position:relative;transform-style:preserve-3d;transition:transform 5s;}
+    /* 多棱柱盒子的面，中心为基点 */
+    .box-4>div{width:100px;height:100px;text-align:center;line-height:100px;background:rgba(255,0,0,.4);position:absolute;border:1px dotted #8e0202;box-sizing: border-box;}
+    .box-wrap-4:hover .box-4{transform:rotateY(-360deg);}
+    
+
+    /* animation */
+    .an-wrap{width:300px;height:120px;position:relative;border:1px solid #999;}
+    .an{width:50px;height:50px;background:rgba(255,0,0,.4);position:absolute;left:50%;top:50%;margin-left:-25px;margin-top:-25px;line-height:50px;font-size:10px;text-align:center;}
+    /* 关键帧的名称 */
+    .an{
+      /* 动画本身的属性 */
+      animation-name:move;
+      animation-duration:3s;  /*一个动画周期时长*/
+
+      animation-timing-function: linear;  /* 一个动画关键帧时长，而非整个动画周期的时长，控制一个关键帧周期*/
+      /* step(1,end) 理解：关键帧周期/动画周期 */ 
+      animation-direction: reverse;  /* 动画方向,反转的属性有关键帧from，to执行方向和animation-timing-function */
+      /*
+      normal:from 到 to;
+      reverse:to 到 from;
+      alternate: from-to,to-from
+      alternate-reverse: to-from,from-to
+      */
+
+      /* 动画外的属性 */
+      animation-delay:3s;
+      /* 动画内关键帧的属性 */
+      animation-iteration-count:3; /* 重复的是关键帧 infinite无限次*/
+      /* 元素在动画外的状态：即from之前to之后 */
+      animation-fill-mode:both;
+      /*
+        none:默认  
+        backwards:from之前的状态和from的状态保持一致；
+        forwards:to之后的状态和to的状态保持一致；
+        both:backwards+forwards
+      */
+    }
+    /* 定义动画状态：鼠标移动上去暂停 */
+    .an-wrap:hover .an{animation-play-state: paused;}
+    @keyframes move{
+      from{transform:translateX(100px)}
+      to{transform:translateX(-100px)}
+    }
   </style>
 </head>
 <body>
@@ -54,6 +175,28 @@
     <div class="gradient gradient-6"><span>重复渐变</span></div>
     <div class="gradient gradient-7"><span>重复渐变+角度</span></div>
   </div>
+
+  <h2>渐变实例:</h2>
+  <div class="item">
+    <h4>发廊灯</h4>
+    <div class="wrap" style="border:1px solid #eee;box-shadow:1px 1px 5px 3px #eee;overflow:hidden;">
+      <div class="gradient gradient-8" style="height:600px;"></div>
+      <script>
+        var gradient8 = document.getElementsByClassName("gradient-8")[0];
+        var flag = 0;
+        gradient8.onmouseover=function(){
+          setInterval(function(){
+            flag++;
+            if(flag>=300){
+              flag=0;
+            }
+            gradient8.style.marginTop = -flag + "px";
+          },1000/60)
+        }
+      </script>
+    </div>
+  </div>
+
   <h2>径向渐变(红到黄)</h2>
   <div class="item">
     <div class="radial"><span>默认渐变</span></div>
@@ -62,10 +205,12 @@
     <div class="radial radial-4"><span>不同尺寸</span></div>
     <div class="radial radial-5"><span>方向</span></div>
   </div>
+
   <h2>文本效果</h2>
   <div class="item">
     <span style="text-shadow: 2px 5px 3px #f00">Text-shaodw</span>
   </div>
+
   <h2>转换</h2>
   <div class="item">
     <div class="transform">默认width:150px;height:150px;</div>
@@ -74,12 +219,150 @@
     <div class="transform" style="transform:scale(0.9, 0.5)">transform:scale(0.9, 0.5)</div>
     <div class="transform" style="transform:skew(45deg)">transform:skew(45deg),第2个参数默认为0</div>
     <div class="transform" style="transform:skew(45deg, -45deg)">transform:skew(45deg, 45deg)</div>
-    <div class="transform" style="transform:matrix(0.8, 0.5, -0.5, 0.5, 0, 0)">transform:skew(45deg, 45deg)</div>
+    <div class="transform" style="transform:matrix(0.8, 0.5, -0.5, 0.5, 0, 0)">transform:matrix(0.8, 0.5, -0.5, 0.5, 0, 0)</div>
   </div>
+
   <h2>过渡</h2>
   <div class="item">
     <div class="transition"></div>
     <div class="transition transition-2"></div>
   </div>
+
+  <h2>组合变化</h2>
+  <p>组合变化从右往左计算<br>矩阵变化最终效果与属性顺序有关</p>
+  <div class="item item-group">
+    <div class="div1-1"></div>
+    <div class="div1-2"></div>
+  </div>
+
+  <h2>练习：扇形导航</h2>
+  <div class="item">
+  </div>
+
+  <h2>3D转换</h2>
+  <div class="item item-3d" style="background:#ddd;">
+    <div class="trans-3d-1">rotateX</div>
+    <div class="trans-3d-2">rotateY</div>
+    <div class="trans-3d-3">rotateZ</div>
+    <div class="trans-3d-4">rotate3D</div>
+  </div>
+
+  <h2>立方体</h2>
+  <div class="item">
+    <p>1.鼠标移动上盒子旋转，故class.box的父层需要3d景深舞台；<br>
+      2.以后面为视点，定位其余五面的位置；<br>
+      3.景深层级各面取不到，需要添加景深属性。
+    </p>
+    <div class="box-wrap">
+      <div class="box">
+        <div class="box-item box-before">前</div>
+        <div class="box-item box-after">后</div>
+        <div class="box-item box-left">左</div>
+        <div class="box-item box-right">右</div>
+        <div class="box-item box-top">上</div>
+        <div class="box-item box-bottom">下</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>立方体-改进</h2>
+  <div class="item">
+    <p>1.每个面的基点定义在正方体的中心；<br>
+      2.以正方体中心为基点，变换各面的位置；<br>
+    </p>
+    <div class="box-wrap-2">
+      <div class="box-2">
+        <div class="box-2-item box-2-before">前</div>
+        <div class="box-2-item box-2-after">后</div>
+        <div class="box-2-item box-2-left">左</div>
+        <div class="box-2-item box-2-right">右</div>
+        <div class="box-2-item box-2-top">上</div>
+        <div class="box-2-item box-2-bottom">下</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>三棱柱，忽略顶部和底部的面</h2>
+  <div class="item">
+    <p>1.原理同上正方体2方法；5个面<br>
+    </p>
+    <div class="box-wrap-3">
+      <div class="box-3">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+      </div>
+    </div>
+  </div>
+  
+  <h2>总结</h2>
+  <div class="item">
+    <p>通过正方体和三棱柱总得出(忽略顶部和底部的面)：<br>
+      1.定义中心点为基点，通过三角函数（边长*tan(内角/2)）计算出Z轴中心点位置（多变形的外交和等于180度）；<br>
+      2.故第N面旋转的度数=N*外角
+    </p>
+    <div class="box-wrap-4">
+      <div class="box-4">
+      </div>
+    </div>
+  </div>
+  <script>
+    function createBox(n){
+      // 计算外角度数
+      var degOut = 360/n;
+      console.log("外角："+degOut);
+
+      // 计算内角度数
+      var degIn = 180-degOut;
+      console.log("内角："+degIn);
+      
+      // 获取舞台及多面体，赋值基点
+      var boxWrap = document.getElementsByClassName("box-wrap-4")[0];
+      var boxNode = document.getElementsByClassName("box-4")[0];
+
+      // 计算基点位置：中心点距离，即Z轴偏移距离
+      var length = boxNode.offsetWidth;
+      console.log(length);
+      // 角度转弧度
+      var zAxis = length/2 * Math.tan((degIn/2)*Math.PI/180);
+      console.log(zAxis);
+      // 基点
+      var basicPoint = 'transform-origin:center center ' + (-zAxis) + 'px';
+      console.log(basicPoint);
+      boxWrap.style=basicPoint;
+      boxNode.style=basicPoint;
+
+      // 创建多棱柱的面html
+      var text = "";
+      
+      // 创建不各面的的css
+      var cssText = "";
+
+      for(var i=0;i<n;i++){
+        cssText = 'transform:rotateY(' + (+i*degOut) + 'deg)';
+        console.log(cssText);
+        // 拼接transform-origin和transform:rotate()
+        var styleText = basicPoint+ ';' +cssText;
+        console.log(styleText);
+        text += '<div style="' + styleText +'">' + (i+1) +'</div>';
+        console.log(text);
+      }
+      boxNode.innerHTML=text;
+    }
+    window.onload = createBox(9);
+  </script>
+  
+  <h2>animation</h2>
+  <div class="item">
+    <p>1.<br>
+    </p>
+    <div class="an-wrap">
+      <div class="an">
+        动画
+      </div>
+    </div>
+  </div>
+
+
 </body>
 </html>
