@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flex布局, meida查询</title>
+  <style>
+    .con{width:100%;display:inline-block;}
+    h2{margin-bottom:0;}
+    p{color:#999;font-size:13px;margin-top:4px;}
+   
+    p.tip{border-left:4px solid #42b983;padding:10px 15px;color:#777;background-color:rgba(66, 185, 131, .1);}
+
+    .wrap,.wrap-old{width:300px;height:250px;border:1px solid #ddd;}
+    .item{width:50px;height:50px;line-height:50px;text-align:center;background:#42b983;color:#fff;}
+
+    /* 新版本 旧版本 主轴/侧轴 */
+
+    /* flex box */
+    .wrap{display:flex;}
+    .wrap-old{display:-webkit-box;}
+
+    /* 控制布局方向和子元素排列方向 */
+    /* 按列布局且子元素倒序 */
+    .wrap{flex-direction:column-reverse;}
+    .wrap-old{-webkit-box-direction:reverse;-webkit-box-orient:vertical;}
+
+    /* 富裕空间管理 */
+    /* 主轴-子元素间等分 */
+    .wrap{justify-content:space-between;}
+    .wrap-old{-webkit-box-pack:justify;}
+    /* 侧轴-居中*/
+    .wrap{align-items: center;}
+    .wrap-old{-webkit-box-align:center;}
+
+    /* 子元素超出父容器时是否换行 */
+    /* .wrap{flex-wrap:wrap-reverse;}  反方向换行 */
+    .wrap-old{}
+
+    /* 子元素超出父容器时是否换行 */
+    .wrap{}
+    .wrap-old{}
+  </style>
+</head>
+<body>
+  <h2>flex</h2>
+  <div class="con">
+    <p class="tip">1.Android &lt4.4旧版本支持-webkit-flex:box;<br>
+       2.postcss解决所有旧版本问题
+    </p>
+
+    <p class="tip">1.新版本 flex-direction同时控制布局方向和子元素排列方向;<br>
+      2.旧版本 需要-webkit-box-orient 和 -webkit-box-derection 结合控制布局方向和子元素排列方向
+   </p>
+
+    <h3>新版本</h3>
+    <div class="wrap">
+      <div class="item">1</div>
+      <div class="item">2</div>
+      <div class="item">3</div>
+      <div class="item">4</div>
+    </div>
+
+    <h3>旧版本</h3>
+    <div class="wrap-old">
+      <div class="item">1</div>
+      <div class="item">2</div>
+      <div class="item">3</div>
+      <div class="item">4</div>
+    </div>
+  </div>
+</body>
+</html>

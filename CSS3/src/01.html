@@ -149,9 +149,48 @@
     }
     /* 定义动画状态：鼠标移动上去暂停 */
     .an-wrap:hover .an{animation-play-state: paused;}
+
     @keyframes move{
       from{transform:translateX(100px)}
       to{transform:translateX(-100px)}
+    }
+
+    /* 图片动画 */
+    .an-1{width:142.85px;height:90px;background:url(../src/images/space-to-top.png) no-repeat;background-size:auto 100%;animation:move 0.8s steps(7) infinite}
+    @keyframes move {
+      from{
+        background-position-x: 0px;
+      }
+      to{
+        background-position-x:-1000px;}
+    }
+
+    /* 加载中-文字动画 */
+    .an-wrap{text-align:center;}
+    .an-loading{display:inline-block;margin:45px auto;}
+    /* 每个字母的延迟时间不一样，故需要结合js处理 */
+    .an-loading span{position:relative;font-size:18px;letter-spacing:-2px;/*animation:letterMove .5s alternate infinite;*/}
+    @keyframes letterMove {
+      form{
+        top:0;
+      }
+      to{
+        top:5px;
+      }
+    }
+
+
+    /* 加载中-图片加载进度 */
+    .an-logo-loading{margin-top:20px;transform-style:preserve-3d;transform-origin:center center -28.86px;}
+    .an-logo-loading img{height:50px;animation:logoLoading 3s linear alternate infinite}
+    .an-logo-loading p b{color:#DF0F00;}
+    @keyframes logoLoading {
+      from{
+        transform:rotateY(0deg)
+      }
+      to{
+        transform:rotateY(360deg)
+      }
     }
   </style>
 </head>
@@ -361,6 +400,80 @@
         动画
       </div>
     </div>
+  </div>
+
+  <h2>animation-图片连续动画</h2>
+  <div class="item">
+    <p>类似雪碧图连续帧动画
+    </p>
+    <div class="an-wrap-1">
+      <!-- 动画盒子 -->
+      <div class="an-1">
+      </div>
+    </div>
+  </div>
+
+  <h2>animation-文字加载中</h2>
+  <div class="item">
+    <div class="an-wrap">
+      <!-- 动画盒子 -->
+      <div class="an-loading">
+        <span>L</span>
+        <span>o</span>
+        <span>a</span>
+        <span>d</span>
+        <span>i</span>
+        <span>n</span>
+        <span>g</span>
+        <span>.</span>
+        <span>.</span>
+        <span>.</span>
+      </div>
+    </div>
+    <script>
+      function letterMove(){
+        var letterNode = document.querySelectorAll(".an-loading span");
+        var color = ["#264653", "#2A9D8F", "#E9C46A", "#F4A261", "#E76F51"];
+        for(var i=0;i<letterNode.length;i++){
+          // letterMove .5s alternate infinite;
+          letterNode[i].style.animation = "letterMove .35s "+(i*100)+"ms linear alternate infinite";
+          letterNode[i].style.color = color[i%5];
+        }
+      }
+      window.onload = letterMove();
+    </script>
+  </div>
+
+  <h2>animation-图片加载中</h2>
+  <div class="item">
+    <div class="an-wrap">
+      <!-- 动画盒子 -->
+      <div class="an-logo-loading">
+        <img src="./images/HYS-logo.png">
+        <p>已加载<b>0</b>%</p>
+      </div>
+    </div>
+    <script>
+      function logoLoading(){
+        var loadText = document.querySelector(".an-logo-loading p");
+        var flag = 0;
+        var arr = [];
+        // 获取加载的图片地址数组
+        for(item in imgdata){
+          arr = arr.contact(imgdata[item])
+        }
+        // img.onload事件计算加载图片的个数
+        for(var i=o;i<arr.length;i++){
+          var img = new Image();
+          img.src = arr[i];
+          img.onload = function(){
+            flag++;
+            loadText.innerHTML = "已加载<b>  "+ (Math.round(flag/arr.length*100)) +"</b>%";
+          }
+        }
+      }
+      window.onload = logoLoading();
+    </script>
   </div>
 
 
