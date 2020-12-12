@@ -1,0 +1,113 @@
+/* 
+ less.html
+ 2020-12-12
+ yuen
+*/
+* {
+  margin: 0;
+}
+body {
+  background: #f2f2f2;
+}
+.wrap {
+  max-width: 1200px;
+  color: #718096;
+}
+.wrap .nav {
+  height: 60px;
+  background: #009688;
+  color: #fff;
+}
+.wrap .nav:hover {
+  box-shadow: 0 2px 5px #9e9e9e;
+}
+.wrap .main .con {
+  width: 300px;
+  height: 300px;
+  float: left;
+  margin: 10px;
+  background: #718096;
+  color: #009688;
+  position: relative;
+}
+.wrap .main .con .con-item {
+  width: 200px;
+  height: 200px;
+  background: rgba(214, 79, 0.85);
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+.wrap .main .con2 {
+  width: 300px;
+  height: 300px;
+  float: left;
+  margin: 10px;
+  background: #718096;
+  color: #009688;
+  position: relative;
+  font-size: 18px;
+}
+.wrap .main .con2 .con-item {
+  width: 200px;
+  height: 200px;
+  background: rgba(214, 79, 0.85);
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+.wrap .main .con2 .con2-item {
+  width: 150px;
+  height: 50px;
+  background: #f00;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+.wrap .main .con3 {
+  width: 300px;
+  height: 300px;
+  float: left;
+  margin: 10px;
+  background: #718096;
+  color: #009688;
+  position: relative;
+}
+.wrap .main .con3 .con-item {
+  width: 200px;
+  height: 200px;
+  background: rgba(214, 79, 0.85);
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+.wrap .main .con3 .con3-item {
+  width: 100px;
+  height: 100px;
+  background: pink;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+.wrap .footer {
+  width: 100%;
+  float: left;
+  background: #999;
+  padding: 10px 0;
+  text-align: center;
+}

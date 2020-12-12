@@ -1,0 +1,66 @@
+/* 
+ less.html
+ 2020-12-12
+ yuen
+*/
+
+// 以 // 开头的注释，**不会**被编译到css文件中
+// 以 /**/  包裹的注释会被编译到css文件中/
+
+//定义全局样式
+// 变量以@开头
+
+// 颜色
+@colorBg:#f2f2f2;
+@colorBgHover:#9e9e9e;
+@colorMain:#009688;
+@colorFont:#718096;
+@colorLightFont:#fff;
+@colorBgFooter:#999;
+
+// URL
+@URLImages:images/;
+
+// 选择器变量
+@nav:.nav;
+
+*{margin:0;}
+body{background:@colorBg;}
+// 带参数的混合
+// .center(@w,@h,@bgColor){width:@w;height:@h;background:@bgColor;position:absolute;left:0;top:0;right:0;bottom:0;margin:auto;}
+
+// 带默认值参数的混合
+.center(@w:100px,@h:100px,@bgColor:pink){width:@w;height:@h;background:@bgColor;position:absolute;left:0;top:0;right:0;bottom:0;margin:auto;}
+
+.wrap{max-width:1200px;color:@colorFont;
+  @{nav}{
+    height:60px;background:@colorMain;color:@colorLightFont;
+    &:hover{  // &表示平级，去掉空格
+      box-shadow:0 2px 5px @colorBgHover;
+    }
+  }
+
+  .main{
+    // 混合
+    // .con(){width:300px;height:100px;background:@colorBg;color:@colorMain}
+
+    .con{width:300px;height:300px;float:left;margin:10px;background:@colorFont;color:@colorMain;position:relative; 
+      //  带参数的混合
+      .con-item{.center(200px, 200px, rgba(214, 79, 0.85))}
+    }
+    .con2{.con;font-size:18px;
+      .con2-item{.center(150px, 50px, #f00)}
+    }
+    .con3{.con;
+      .con3-item{.center()}  // 带默认值参数的混合
+    }
+
+    
+  
+  }
+
+  .footer{width:100%;float:left;background:@colorBgFooter;padding:10px 0;text-align:center;
+
+  }
+}
+
