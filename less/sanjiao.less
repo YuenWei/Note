@@ -1,0 +1,32 @@
+// 三角
+// 混合-匹配模式 @_表示，不管上下左右都带上这个固定的样式
+// 形参个数一致
+.sanjiao(@_, @w, @c){
+  border-style:solid;
+  width:0;
+  height:0;
+}
+
+// 重新定义：上  三角形 大小，颜色，方向
+.sanjiao(top, @borderWidth:50px, @borderColor:#009688){
+  border-width:@borderWidth;
+  border-color: transparent transparent @borderColor transparent;
+}
+
+// 重新定义：右 三角形 大小，颜色，方向
+.sanjiao(right, @borderWidth:40px, @borderColor:#f00){
+  border-width:@borderWidth;
+  border-color: transparent transparent transparent @borderColor;
+}
+
+// 重新定义：下  三角形 大小，颜色，方向
+.sanjiao(bottom, @borderWidth:30px, @borderColor:#00f){
+  border-width:@borderWidth;
+  border-color:@borderColor transparent transparent transparent;
+}
+
+// 重新定义：左  三角形 大小，颜色，方向
+.sanjiao(left, @borderWidth:20px, @borderColor:#0f0){
+  border-width:@borderWidth;
+  border-color:transparent  @borderColor transparent transparent;
+}

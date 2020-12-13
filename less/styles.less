@@ -10,6 +10,12 @@
 //定义全局样式
 // 变量以@开头
 
+// 混入-匹配模式
+@import "sanjiao.less";
+
+// 继承
+@import "center.less";
+
 // 颜色
 @colorBg:#f2f2f2;
 @colorBgHover:#9e9e9e;
@@ -17,6 +23,9 @@
 @colorFont:#718096;
 @colorLightFont:#fff;
 @colorBgFooter:#999;
+
+// 字号
+@fontSizeSmall:12px;
 
 // URL
 @URLImages:images/;
@@ -27,10 +36,15 @@
 *{margin:0;}
 body{background:@colorBg;}
 // 带参数的混合
-// .center(@w,@h,@bgColor){width:@w;height:@h;background:@bgColor;position:absolute;left:0;top:0;right:0;bottom:0;margin:auto;}
+.center-default(@w,@h,@bgColor){width:@w;height:@h;background:@bgColor;position:absolute;left:0;top:0;right:0;bottom:0;margin:auto;}
 
 // 带默认值参数的混合
 .center(@w:100px,@h:100px,@bgColor:pink){width:@w;height:@h;background:@bgColor;position:absolute;left:0;top:0;right:0;bottom:0;margin:auto;}
+
+.row(){width:100%;float:left;}
+
+// // 三角
+// .sanjiao(@borderWidth:50px,@borderColor:#009688){border-width:@borderWidth;border-style:solid;border-color:@borderColor transparent transparent  transparent;}
 
 .wrap{max-width:1200px;color:@colorFont;
   @{nav}{
@@ -44,9 +58,12 @@ body{background:@colorBg;}
     // 混合
     // .con(){width:300px;height:100px;background:@colorBg;color:@colorMain}
 
-    .con{width:300px;height:300px;float:left;margin:10px;background:@colorFont;color:@colorMain;position:relative; 
-      //  带参数的混合
-      .con-item{.center(200px, 200px, rgba(214, 79, 0.85))}
+    .con{width:220px;height:200px;float:left;margin:10px;background:@colorFont;color:@colorMain;position:relative; 
+      //   不输出，带参数的混合
+      .con-item(){.center(200px, 150px, rgba(214, 79, 0.85))}
+    }
+    .con1{.con;font-size:18px;
+      .con1-item{.center(160px, 100px, #0f0);}  // 见第一个.center;
     }
     .con2{.con;font-size:18px;
       .con2-item{.center(150px, 50px, #f00)}
@@ -54,9 +71,69 @@ body{background:@colorBg;}
     .con3{.con;
       .con3-item{.center()}  // 带默认值参数的混合
     }
-
-    
+    // 混合-命名参数
+    .con4{.con;
+      .con4-item{.center(@bgColor:#000;)}  // 指定背景色，其他参数默认
+    }
+    // 混合-匹配模式, 自定义不同方向，大小，颜色的三角形
+    .con5{.con;
+      .con5-item{.center(0,0,none);
+        border-width:80px;border-style:solid;border-color:transparent transparent #009688 transparent;color:@colorLightFont;
+      }
+    }
   
+  // 抽离出sanjiao.less
+  .sanjiao-wrap{
+    width:100%;float:left;
+    .sanjiao-item{float:left;}
+    .sanjiao-item-1{.sanjiao(top,60px, #718096);}
+    .sanjiao-item-2{.sanjiao(right, 55px, #009688);}
+    .sanjiao-item-3{.sanjiao(bottom, 36px, #718096);}
+    .sanjiao-item-4{.sanjiao(left, 20px, #009688);}
+  }
+
+  .inherit-wrap{.row;
+    .inherit{width:300px;height:200px;float:left;border:1px solid #999;position:relative;font-size:12px;
+      .inherit-item{
+        .center();
+        &:nth-child(1){  // 继承.center 垂直水平居中，默认宽100px,高100px
+        }
+        &:nth-child(2){
+          width:70px;height:70px;  // 继承.center，修改宽高和背景色
+          background:rgba(255,0,0,0.5);
+        }
+        &:nth-child(3){
+          width:120px;height:50px;
+          background:rgba(255,255,0,0.6);
+        }
+        &:nth-child(3){}
+      }
+    }
+  }
+
+  .inherit-2{
+    //  // 第一种写法
+    // .inherit-item-2:extend(.center){
+    //   width:50px;height:50px;background:pink;
+    // }
+
+
+    // 第二种写法
+    .inherit-item-2{
+      &:extend(.center);
+      width:100px;height:100px;background:pink;
+      
+      &:nth-child(2){
+        width:150px;height:30px;background:rgba(255,0,0,0.5)
+      }
+      
+      // 继承所有状态
+      &:nth-child(3):extend(.center all){
+        width:120px;height:70px;background:rgba(255,0,0,0.5)
+      }
+    }
+  }
+
   }
 
   .footer{width:100%;float:left;background:@colorBgFooter;padding:10px 0;text-align:center;
