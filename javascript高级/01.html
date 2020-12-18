@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="btn">button</button>
+
+  <script>
+    // typeof	可以判断：number,undefined,string,boolean
+            //不能判断 null, object, array,(typeof null)输出object
+    // instanceof
+    // ===  可以判断：undefined, null
+  
+    // 基本类型
+    var a, b=null;
+    console.log(a)  // undefined
+    console.log(b);  // null
+    // console.log(c);  // 报错: c is not undefined
+  
+    console.log(typeof a)  // 输出'undefined'  字符
+    // instanceof   // 判断对象的具体类型
+    console.log(typeof a === 'undefined');  // true
+    console.log(a === undefined);  //true
+  
+    // 对象类型
+    var b1 = {
+      b2:[1, 'abc', console.log],
+      b3:function(){
+        console.log('b3');
+        return function(){
+          return 'b3-result';
+        }
+      }
+    }
+  
+    console.log(b1 instanceof Object, b1 instanceof Array); // true false
+    console.log(b1.b2 instanceof Object, b1.b2 instanceof Array); // true true
+    console.log(b1.b3 instanceof Object, b1.b3 instanceof Function);  // true true
+  
+    console.log(typeof b1.b3 === 'function'); // true
+  
+    console.log(typeof b1.b2[2]); // function
+  
+    // b1.b3()();
+    console.log(b1.b3()());  // b3 b3-result
+  
+  
+    // 赋值问题
+    var a = {age:12}
+    var b = a;
+    a = {name:'jack', age:13}
+  
+    console.log(a.name, a.age, b.name, b.age);  // jack 13 undefined 12
+  
+    function fn(obj){
+      obj = {age:14};	// obj指向改变，a的指向未改变  函数作用域执行完后回收内存
+    }
+    fn(a);  // 调用函数传递变量时，传的是值（值可能是基本数据，也有可能是地址）
+    console.log(a.age);  //	13
+  
+    // 2.对象
+    // 对象的组成：
+    // 属性：属性名，属性值组成；
+    // 方法：一种特殊的属性，属性值是函数；
+  
+    // 访问对象方法：
+    // 1 obj.方法名();
+    // 2 obj['属性名']();  // 通用但较少用，1.方法名包含特殊字符（-, 空格）情况下使用;2.变量名是变量
+  
+    // obj['属性名']()的场景;
+    var person = {
+      name: 'jack',
+      age: 18,
+      setName:function(name){
+        this.name = name;
+      },
+      setAge:function(age){
+        this.age = age;
+      }
+    }
+  
+    // 1.给person添加新属性sex-letter[属性名包含-]
+    person['sex-letter'] = 'F/M';
+    console.log(person);
+    console.log(person['sex-letter']);
+  
+    // 2.变量名是变量
+    var firstName = 'Swift';
+    person[firstName] = 'var name';
+    console.log(person[firstName]);
+  
+    // 3 函数
+    // 3.1函数声明的两种方式
+    // 函数式声明
+    function fn1(){
+  
+    }
+  
+    // 表达式声明函数
+    var fn2 = function(){
+  
+    }
+  
+    var obj = {};
+  
+    // 3.2 函数调用
+    // fn();
+    // obj.fn();
+    // new fn();
+    // fn.call(obj); // 可以让一个函数成为指定任意对象的方法调用
+    // fn.apply(obj);
+  
+    // 3.3 回调函数
+    // 定义了，没有调用但是执行了的函数：
+    // 1 dom事件回调
+    // 2 定时器（超时定时器，循环定时器）
+    
+    document.getElementById("btn").onclick = function(){
+      console.log("dom 事件回调函数");
+    }
+  
+    setTimeout(function(){
+      console.log("延时 回调函数");
+    }, 2000);
+
+
+    // 4 IIFE 
+    // 立即调用函数表达式
+    // 作用：1.隐藏实现；2.不会污染外部命名空间；3.编写JS模块（模块化）
+    var a = 3;
+    console.log(a);
+    (function(){  //匿名函数
+      var a = 4;
+      console.log(a + 1);
+      console.log("立即执行");
+    })();
+
+    // 如何调用匿名函数中的function
+    // 注意，代码块前的分号
+    (function(){
+      var a = 1;
+      function test(){
+        console.log(++a);
+      }
+      window.$ = function(){  // 向外暴露全局函数
+        return {
+          test:test
+        }
+      }
+    })()
+    $().test();
+
+    // 5 函数中的this
+
+    /* 5.1 this是什么？
+    函数外部this是window 
+    任何函数本质上都是通过一个对象来调用，没有指定则是window
+    所有函数内部都有this，他的值是调用函数的当前对象
+    */
+
+    function Person(color){
+      console.log(this);
+
+      this.color = color;
+
+      this.getColor = function(){
+        console.log(this);
+        return this.color
+      }
+
+      this.setColor = function(){
+        console.log(this);
+        this.color = color;
+      }
+    }
+
+    Person("red");  // this是谁？ window
+
+    var p = new Person("yellow");  // this是谁？  p
+
+    p.getColor();  // this是谁？  p
+
+    var obj = {};
+    p.setColor.call(obj, "Green")  // this是谁？  obj
+
+    var test = p.setColor;
+    test();  // this是谁？ window
+
+    function fun1(){
+      console.log(this);  // this是谁？ window
+      function fun2(){
+        console.log(this);  // this是谁？ window
+      }
+      fun2()
+    }
+
+    fun1();
+
+
+    /* 6 分号 
+      推荐不加；
+      下面2种情况例外：
+        1.小括号开头的前一条语句，即匿名函数自调用前；
+        2.中方括号开头的前一条语句，
+    */
+
+    ;(function(){
+      console.log("匿名函数 前需加;");
+    })()
+
+    var a = 5
+    ;[3, 'abc'].forEach(function(i){
+      console.log(i+ "：[]前加 分号");
+    })
+  
+    </script>
+</body>
+</html>
