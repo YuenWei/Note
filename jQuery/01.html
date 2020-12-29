@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jQuery</title>
+  <style>
+    .item{width:100%;float:left;margin-bottom:20px;}
+  </style>
+  
+  <!-- js写法 -->
+  <script>
+  window.onload = function(){
+    // 1.1
+    var btn1 = document.getElementById("btn1")
+    btn1.onclick = function(){
+      var inputText1 = document.getElementById("userName").value
+      console.log('js:' + inputText1)
+    }
+  }
+  </script>
+  
+  <!-- jQuery写法 -->
+  <script src="jquery-3.5.1.js"></script>
+  <script type="text/javascript">
+  // 绑定文档加载完成的监听
+  $(function(){
+    $("#btn2").click(function(){  // 按钮绑定监听
+      var inputtext2 = $('#userName').val()
+      console.log('jq:' + inputtext2)
+    })
+  })
+  </script>
+</head>
+<body>
+  <!-- 1.1 js/jquery获取input用户名 -->
+  <div class="item">
+    用户名：<input type="text" name="用户名" id="userName">
+    <button id="btn1">js获取</button>
+    <button id="btn2">jq获取</button>
+  </div>
+
+  
+</body>
+</html>
