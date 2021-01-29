@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajax</title>
+  <style>
+    .item{margin-top:10px;margin-bottom:20px;}
+    p{margin-bottom:4px;font-size:13px}
+    .box{width:200px;padding:10px;border:1px solid #091;font-size:12px;color:#434}
+    button{margin-top:8px;}
+  </style>
+</head>
+<body>
+  <div class="item">
+    <p>GET请求</p>
+    <div class="box"></div>
+    <button class="btn">发送请求</button>
+  </div>
+  <div class="item">
+    <p>Post请求</p>
+    <div class="box box2">鼠标移入div发送请求</div>
+  </div>
+  <div class="item">
+    <p>服务端返回JSON</p>
+    <div class="box box3">返回JSON</div>
+    <button class="btn3">JSON</button>
+  </div>
+  <div class="item">
+    <p>IE缓存问题</p>
+    <div class="box box4">返回JSON</div>
+  </div>
+  <div class="item">
+    <p>Ajax请求超时与网络异常</p>
+    <div class="box box5"></div>
+  </div>
+  <div class="item">
+    <p>取消请求</p>
+    <div class="box box6"></div>
+    <button class="btn6_1">发送请求</button>
+    <button class="btn6_2">取消请求</button>
+  </div>
+
+  <script>
+    // GRT
+    var btn = document.getElementsByClassName('btn')[0]
+    var res = document.getElementsByClassName('box')[0]
+    btn.onclick = function(){
+      // 1 创建对象
+      var xhr = new XMLHttpRequest()
+      // 2 设置请求方法和URL
+      xhr.open('GET', 'http://127.0.0.1:8000/server?a=100&b=200')  // 传参
+      // 3 发送
+      xhr.send()
+      // 4 事件绑定 处理返回结果
+         // readystate 是 xhr 对象实例中的属性，表示状态
+         // readystate 0初始状态， 1open方法调用完毕 ，2send方法调用完毕，3服务费返回部分结果，4服务端返回所有结果
+         // change 状态改变触发，总共4次，
+      xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4){  // 判断服务端全部返回
+          // 5 判断响应状态码
+          if(xhr.status >= 200 && xhr.status < 300 ){
+            // 6 处理服务端返回结果
+            console.log(xhr.status)    // 响应状态码
+            console.log(xhr.statusText)  // 响应字符串
+            console.log(xhr.getAllResponseHeaders()) // 响应头
+            console.log(xhr.response)
+
+            // 7 获取服务端返回结果
+            res.innerHTML = xhr.response
+          }
+        }
+      } 
+    }
+  </script> 
+
+  <script>
+    // POST
+    var box2 = document.getElementsByClassName('box2')[0]
+    box2.onmouseover = function(){
+      var xhr2 = new XMLHttpRequest()
+      xhr2.open('POST', 'http:127.0.0.1:8000/server?user=admin&b=200&c=300')
+      // xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded') //  设置请求头，可自定义
+      xhr2.setRequestHeader('name', 'myValue')
+      // 报错
+      // express中设置响应头 所有类型都可以接受
+      // response.setHeader('Access-Control-Allow-Headers', '*')
+      xhr2.send()
+      xhr2.onreadystatechange = function(){
+        if(xhr2.readyState ===4){
+          if(xhr2.status >= 200 && xhr2.status < 300){
+            box2.innerHTML = xhr2.response
+          }
+        }
+      }
+    }
+  </script>
+  
+  <script>
+    //Ajax
+    var btn3 = document.getElementsByClassName('btn3')[0]
+    var box3 = document.getElementsByClassName('box3')[0]
+    btn3.onclick = function(){
+      var xhr3 = new XMLHttpRequest()
+      xhr3.responseType = 'json'
+      xhr3.open('GET', 'http://127.0.0.1:8000/json') 
+      xhr3.send()
+      xhr3.onreadystatechange = function(){
+        if(xhr3.readyState === 4){
+          if(xhr3.status >= 200 && xhr3.status <300){
+            console.log('json返回成功');
+            // box3.innerHTML = xhr3.response
+            // 手动转化返回的json数据需要转化
+            //var newData = JSON.parse(xhr3.response)
+           // box3.innerHTML = '用户名：' + newData.name + '<br>密码：' + newData.password
+            
+            // 自动转换
+            box3.innerHTML = '自动转化JSON<br>用户名：' + xhr3.response.username + '<br>密码：' + xhr3.response.password
+          }
+        }
+      }
+    }
+  </script>
+
+  <script>
+    // ie缓存
+    var box4 = document.getElementsByClassName('box4')[0]
+    box4.onmouseover = function(){
+      var xhr4 = new XMLHttpRequest()
+      xhr4.open('GET', 'http://127.0.0.1:8000/ie?t='+Date.now())  //  解决IE缓存
+      xhr4.send()
+      xhr4.onreadystatechange = function(){
+        if(xhr4.readyState === 4){
+          if(xhr4.status >= 200 && xhr4.status <300){
+            box4.innerHTML += xhr4.response
+          }
+        }
+      }
+    }
+  </script>
+
+  <script>
+    // 请求超时与网络异常
+    var box5 = document.getElementsByClassName('box5')[0]
+    box5.onmouseover = function(){
+      var xhr5 = new XMLHttpRequest()
+      // 超时设置
+      xhr5.timeout = 2000
+      // 超时重调
+      xhr5.ontimeout = function(){
+        box5.innerHTML = '超时了'
+      }
+      //  网络异常回调
+      xhr5.onerror = function(){
+        box5.innerHTML = '网络异常'
+      }
+      xhr5.open('GET', 'http://127.0.0.1:8000/net?t='+Date.now())  //  解决IE缓存
+      xhr5.send()
+      xhr5.onreadystatechange = function(){
+        if(xhr5.readyState === 4){
+          if(xhr5.status >= 200 && xhr5.status <300){
+            box5.innerHTML += xhr5.response
+          }
+        }
+      }
+    }
+  </script>
+
+<script>
+  // 取消请求
+  var box6 = document.getElementsByClassName('box6')[0]
+  var box6_1 = document.getElementsByClassName('btn6_1')[0]
+  var box6_2 = document.getElementsByClassName('btn6_2')[0]
+  var xhr6 = null  // 需定义在外部，不然取消请求无法使用
+  box6_1.onclick = function(){
+    xhr6 = new XMLHttpRequest()
+    xhr6.open('GET', 'http://127.0.0.1:8000/net?t='+Date.now())  //  解决IE缓存
+    xhr6.send()
+    xhr6.onreadystatechange = function(){
+      if(xhr6.readyState === 4){
+        if(xhr6.status >= 200 && xhr6.status <300){
+          box6.innerHTML += xhr6.response
+        }
+      }
+    }
+  }
+  box6_2.onclick = function(){
+    xhr6.abort()
+  }
+</script>
+
+</body>
+</html>

@@ -5,7 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>jQuery</title>
   <style>
+    *{margin:0;padding:0;}
+    body{padding:8px;min-height:600px;}
+    ul,li{list-style-type:none;}
+    h3{margin:20px auto 5px;}
+    a{cursor:pointer;}
+    a:hover{text-decoration:underline;}
     .item{width:100%;float:left;margin-bottom:20px;}
+    input{outline:none;}
+    input:focus{border-color:#091;}
+
+    .tab{width:200px;float:left;border:1px solid #666;}
+    .tab ul,.tab-con{display:inline-block;width:100%;}
+    .tab ul li{width:33.333333%;float:left;text-align:center;}
+    .tab-con{border-top:1px solid #999;padding:10px 0;}
+    .tab-con .tab-item{display:none;}
+    .tab-con .tab-item:first-child{display:inline-block;}
+
+    .backTop{position:fixed;right:10px;top:50%;background:#f00;padding:5px;cursor:pointer;}
+    .backTop span{display:inline-block;font-size:12px;color:#fff;line-height:1.2;}
+    
+    table{width:280px;border-collapse: collapse;font-size:12px;}
+    table,table th,table td{border:1px solid #999;}
+    table th,table td{padding:3px 6px;}
+    table a{color:#f00;}
+    .addInfo{width:250px;padding:15px;border:1px solid #999;margin-top:10px;}
+    label{display:block;margin-top:8px;}
+    label span{width:50px;height:20px;line-height:20px;display:inline-block;}
+    label input{width:130px;height:20px;padding:0 10px;}
+    label input[type="button"]{margin-left:50px;background:#091;color:#fff;border:none;}
   </style>
   
   <!-- js写法 -->
@@ -24,22 +52,792 @@
   <script src="jquery-3.5.1.js"></script>
   <script type="text/javascript">
   // 绑定文档加载完成的监听
+  // 1参数为函数:绑定文档加载完成的监听
   $(function(){
+    // 2参数为选择器字符串
     $("#btn2").click(function(){  // 按钮绑定监听
-      var inputtext2 = $('#userName').val()
-      console.log('jq:' + inputtext2)
+      // 3参数为DOM对象
+      $(this).html();
+        console.log('jq:' + inputtext2)
+      })
+      $("#btn3").click(function(){
+        // 4参数为HTML标签字符串
+        $('<input type="text" name="用户名" id="userName">').appendTo('div')
+      })
+
+      // $.each([object|array], callback())
+      var arr = ['孙悟空', '猪八戒', '沙和尚', '白骨精']
+      $.each(arr, function(index, item){
+        console.log(index, item);
+      })
+
+      // $.trim()
+      // 1 string对象
+      var text = '  A bc  '
+      console.log(text);
+      console.log(text.trim());
+      // 2 $.trim()
+      console.log($.trim(text));
+
+      // 4 jQuery对象
+      // 4.1 基本行为
+        // 统计按钮个数
+        var $btns = $("button");  // 1.8后废弃size()
+        console.log($btns.length);
+        // 获取第2个按钮html
+        console.log($btns[2].innerHTML, $btns.get(2).innerHTML);
+        // 输出多有按钮的标签的文本
+        $btns.each(function(index, domEle){
+          console.log(index, domEle.innerHTML, this.id);  // this是当前DOM元素
+        })
+        // 输出按钮#btn3 的下标
+        console.log($("#btn3").index());
+
+      // 4.2
+
+      // tab切换
+      // 1 获取点击li的下标
+      var index = 0 
+      $(".tab>ul>li").click(function(){
+        var curIndex = $(this).index()
+        console.log(curIndex);
+        // 2所有内容置为隐藏
+        var show = $(".tab-con .tab-item")
+        // show.css('display', 'none')
+        // // 3 li对应下标的内容div设置为显示
+        // // show[curIndex].style.display = 'block'  // js 写法，较jQuery执行块
+        // $(show[curIndex]).css('display', 'block')
+
+        //  改进，不能在点击后把所有的设置为隐藏
+        
+        // 2 把之前显示的元素设置为隐藏（不每次都全部）
+        console.log(index)
+        show[index].style.display = 'none'
+        // 设置当前对应下标的内容可见
+        show[curIndex].style.display = 'block'
+        // 更新下标
+        index = curIndex
+
+      })
+
+      // 练习：平滑滚动
+      $('.backTop').click(function(){
+        // 瞬间滚动
+        // $('html,body').scrollTop(0)
+        
+        //平滑滚动，添加时间参数
+        var dist = $('html,body').scrollTop()
+        var time = 500
+        var intervalTime = 50
+        var onceDist = dist/(time/intervalTime)
+        var scrollTop = setInterval(() => {
+          dist -= onceDist;
+          console.log(dist);
+          if(dist <= 0){
+            $('html,body').scrollTop(0)
+            clearInterval(scrollTop)
+          }
+          $('html,body').scrollTop(dist)
+        }, intervalTime)
+      })
+
     })
-  })
   </script>
 </head>
 <body>
   <!-- 1.1 js/jquery获取input用户名 -->
   <div class="item">
-    用户名：<input type="text" name="用户名" id="userName">
+    <label for=""><span>用户名：</span><input type="text" name="用户名" id="userName"></label>
     <button id="btn1">js获取</button>
     <button id="btn2">jq获取</button>
+    <button id="btn3">增加input</button>
   </div>
 
+  <div class="tab">
+    <ul>
+      <li>tab1</li>
+      <li>tab2</li>
+      <li>tab3</li>
+    </ul>
+    <div class="tab-con">
+      <div class="tab-item">
+        tab1-con
+      </div>
+      <div class="tab-item">
+        tab2-con
+      </div>
+      <div class="tab-item">
+        tab3-con
+      </div>
+    </div>
+  </div>
+
+  <div class="backTop">
+    <span>返回<br/>顶部</span>
+  </div>
+
+  <div class="item">
+    <h3>练习</h3>
+    <form action="">
+      你的爱好运动？<input type="checkbox" id="checkedAllBox">全选/全不选
+      <br/>
+      <input type="checkbox" name="sport" id="" value="football" />足球
+      <input type="checkbox" name="sport" id="" value="basketball" />蓝球
+      <input type="checkbox" name="sport" id="" value="badminton" />羽毛球
+      <input type="checkbox" name="sport" id="" value="ping-pong" />乒乓球
+      <br/>
+      <input type="button"  id="checkedAll" value="全选" />
+      <input type="button"  id="checkedNotAll" value="全不选" />
+      <input type="button"  id="checkedRev" value="反选" />
+      <input type="button"  id="checkedSubmit" value="提交" />
+    </form>
+  </div>
+  <script>
+    // 全选/全不选
+    $('#checkedAllBox').click(function(){
+      var $flag = $("input[name='sport']")
+      console.log($flag.filter(':checked'))
+      console.log($flag.length);
+      if($flag.filter(':checked').length < $flag.length){
+        $flag.prop('checked', true)
+      }else{
+        $flag.prop('checked', false)
+      }
+    })
+
+    // 全选
+    $('#checkedAll').click(function(){
+      $('input:checkbox').prop('checked','checked')
+    })
+
+    // 全不选
+    $('#checkedNotAll').click(function(){
+      $('input:checkbox').prop('checked',false)
+      $('input:checkbox').first().prop('checked', true)
+    })
+
+    // 反选
+    $('#checkedRev').click(function(){
+      $('input:checkbox').not(':first').prop('checked',function(index, attr){
+        return !attr
+      })
+    })
+
+    // 提交
+    $('#checkedSubmit').click(function(){
+      var info = new Array
+      var fav = $('input:checkbox').not(':first').filter(':checked')
+      fav.each(function(){
+        info.push(this.value);
+      })
+      if(info.length){
+        console.log('你喜欢的运动有：' + info);
+      }else{
+        console.log('你没有喜欢的运动');
+      }
+      
+    })
+  </script>
+
+<div class="item">
+  <h3>jQuery操作表格</h3>
+  <table>
+    <thead><tr><th>Name</th><th>Email</th><th>Salary</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>Tom</td><td>tom@163.com</td><td>5000</td> <td><a>删除</a></td> </tr>
+      <tr><td>Jerry</td><td>Jerry@163.com</td> <td>8000</td><td><a>删除</a></td></tr>
+      <tr><td>Bob</td><td>Bob@163.com</td><td>25000</td><td><a>删除</a></td></tr>
+    </tbody>
+  </table>
+  <div class="addInfo">
+    <h5>添加新员工</h5>
+    <form>
+      <label for=""><span>name:</span><input type="text" name="name" id=""></label>
+      <label for=""><span>email:</span><input type="text" name="email" id=""></label>
+      <label for=""><span>salary:</span><input type="text" name="salary" id=""></label>
+      <label for=""><input type="button" value="Submit"></label>
+    </form>
+  </div>
+</div>
+
+<script>
+  $(function(){
+
+    function deleteItem(){
+      var $item = $(this).parent().parent()
+      var nameDelete = $item.children(':first').html()
+      var flag = confirm('确定要删除' + nameDelete + '?' )
+      if(flag){
+        $item.remove()
+      }
+    }
+
+    $('td>a').click(deleteItem)
+
+    $('input[type="button"]').click(function(){
+      var name = $("input[name='name']").val()
+      var email = $("input[name='email']").val()
+      var salary = $("input[name='salary']").val()
+      if(name == '' || email == '' || salary == ''){
+        alert('信息不能为空')
+      }else{
+        var $html = $('<tr><td>' +name+ '</td><td>' +email+'</td><td>'+salary+'</td><td><a herf="">删除</a></td></tr>')
+        $html.find('a').click(deleteItem)  // 给新增的a标签绑定事件
+        $('table>tbody').append(html)
+        $("input[type='text']").val('')  // 清空输入框
+      }
+    })
+
+  })
+</script>
+
+<div class="item">
+  <h3>改变点击的li背景色</h3>
+  <ul id="ul1">
+    <li>AAAA</li>
+    <li>BBBBB</li>
+    <li>CCCCCC</li>
+    <li>DDDDDDD</li>
+  </ul>
+  <button value="添加li" id="addLi">添加li</button>
+</div>
+<script>
+  $(function(){
+    // $('#ul1>li').click(function(){
+    //   $(this).css('background', '#f00')
+    // })
+
+    // $('#addLi').click(function(){
+    //   $('#ul1').append('<li>按钮添加的li</li>')
+    // })
+
+    // 问题：通过按钮新增的li点击背景没效果
+    // function setBg(){
+    //   $(this).css('background', '#f00')
+    // }
+
+    // $('#ul1>li').click(setBg)
+     
+    // $('#addLi').click(function(){
+    //   var $li = $('<li>按钮添加的li</li>')
+    //   console.log($li);
+    //   $li.click(setBg)
+    //   $('#ul1').append($li)
+    // })
+
+    // 改进方法2:事件委派.delegate()
+    $('#ul1').delegate('li', 'click', function(){
+      // this.style.background = '#f00'  // js写法
+      $(this).css('background', '#f00')
+    })
+    $('#addLi').click(function(){
+      $('#ul1').append('<li>按钮添加的li</li>')
+    })
+
+    // 移除事件委派
+    // $('#ul1').undelegate()  // 移除所有事件委派
+    // $('#ul1').undelegate('click')  // 移除点击事件的事件委派
+
+  })
+</script>
+
+<div class="item">
+  <h3>轮播图</h3>
+  <style>
+    .container{width:200px;height:200px;float:left;position:relative;overflow:hidden;border:1px solid #999;}
+    .list{width:1400px;height:200px;position:absolute;left:0;}
+    .list img{width:200px;height:200px;float:left;}
+    .point{position:absolute;bottom:4px;text-align:center;left:0;right:0;}
+    .point ul{margin:0 auto;}
+    .point ul li{width:14px;height:14px;line-height:14px;text-align:center;background:#f66;color:#fff;font-size:10px;border-radius:50%;margin:0 3px;display:inline-block;border:1px solid #e00;cursor:pointer;}
+    .point ul li:hover,.point ul li.cur{background:#ff9800;}
+    .dire{width:100%;position:absolute;top:50%;margin-top:-10px;color:#999;font-size:14px;}
+    .dire span:last-child{float:right;}
+    .dire span{display:inline-block;width:20px;height:20px;text-align:center;background:rgba(155,155,155,.05)}
+    .dire span:hover{background:rgba(155,155,155,0.3);cursor:pointer;}
+  </style>
+  <div class="container">
+    <div class="list">
+      <img src="images/5.jpg"><img src="images/1.jpg"><img src="images/2.jpg"> <img src="images/3.jpg"><img src="images/4.jpg"><img src="images/5.jpg"><img src="images/1.jpg">
+    </div>
+    <div class="point">
+      <ul><li class="cur">1</li><li>2</li><li>3</li><li>4</li><li>5</li></ul>
+    </div>
+    <div class="dire">
+      <span id="prev">&lt;</span>
+      <span id="next">&gt;</span>
+    </div>
+  </div>
+  <script>
+    $(function(){
+      var $con = $('.container')
+      var $list = $('.list')
+      var $point = $('.point>ul>li')
+      var $btnPrev = $('#prev')
+      var $btnNext = $('#next')
+      var PAGE_WIDTH  = 200;
+      var TIME = 400  //  翻页总时间
+      var ITEM_TIME = 20 // 每帧移动时间
+      var index = 0
+      var pointNum = $('.point>ul>li').length
+      var pageState = false  // 翻页状态标识
+
+      // 3 自动翻页：每隔3s自动循环翻页
+      setInterval(() => {
+        nextPage(true)
+      }, 3000);
+
+      // 4 鼠标移入，自动切换停止，移出开始自动翻页
+      // $con.hover(function(){
+      //   clearInterval(intervalId)
+      // },function(){
+      //   intervalId = setInterval(function(){
+      //     nextPage(true)
+      //   }, ITEM_TIME)
+      // })
+
+      // 前一页
+      $btnPrev.click(function(){
+        nextPage(false)
+      })
+
+      // 下一页
+      $btnNext.click(function(){
+        nextPage(true)
+      })
+      
+
+      // 1 平滑翻页 
+      // true 下一页，false上一页
+      function nextPage(dir){
+        // 7 bug:翻页中间正在执行时点击翻页，需要立即结束翻页跳转到目标位置
+        if(pageState){
+          return
+        }
+        
+        pageState = true  //  标识翻页进行中，执行定时器结束时翻页停止
+        
+        var offset = 0
+        if(typeof dir == 'boolean'){
+          offset =  dir ? -PAGE_WIDTH : PAGE_WIDTH  // 上/下一页，确定移动方向
+        } else{
+          offset = (dir-index)*-PAGE_WIDTH
+        }
+        
+        var itemOffset = offset/(TIME/ITEM_TIME)  // 每帧偏移量，确定每帧左/右移动方向
+        var curLeft = $list.position().left  // 获取当前偏移的位置
+        var targetOffset = curLeft + offset
+        // console.log(offset, itemOffset, curLeft, targetOffset);
   
+        // $list.css('left', curLeft+offfset)  // 直接反转
+        // 平滑反转结合平滑滑动到顶部
+        // 总偏移量，偏移持续时间，每帧间隔时间，每帧偏移距离
+
+        // 启动循环定时器执行平滑翻页，到达目标处停止定时器
+        var intervalId = setInterval(function (){
+          curLeft += itemOffset
+          if(curLeft === targetOffset){
+            clearInterval(intervalId)
+            pageState = false
+            // 2 无限循环
+            // 第一张前一页复制5.jpg,最后一页复制1.jpg(图片顺序：5，1，2，3，4，5，1)
+            // 判断首尾偏移量curLeft重新计算
+            // 当是最后一张时，后面拼加1.jpg,完成滑动后重新定位curLeft
+            if(curLeft == -PAGE_WIDTH*(pointNum+1)){
+              curLeft = -PAGE_WIDTH
+            }else if(curLeft == 0){
+              curLeft = -PAGE_WIDTH * pointNum
+            }
+          }
+          $list.css('left', curLeft)  // 设置left
+        }, ITEM_TIME)
+
+        // 5 调用圆点状态更新函数
+        updatePoint(dir)
+      }
+
+      // 5 同步更新底部圆点状态
+      function updatePoint(dir){
+        // 5.1 计算目标圆点的下标值
+        var targetIndex = 0
+        // var plus = true ? 1 : -1
+        // 下标范围 0～imgLength-1
+        if (typeof dir == 'boolean') {
+          if(dir){
+            targetIndex = index + 1
+            if(targetIndex == pointNum){
+              targetIndex = 0
+            }
+          }else{
+            targetIndex = index - 1
+            if(targetIndex == -1){
+              targetIndex = pointNum - 1
+            }
+          }
+        } else {  // 点击圆点确定参数为数值，更新圆点下标
+          targetIndex = dir
+        }
+
+        // 5.2 移出当前index下标的class.cur
+        $(".point>ul>li").eq(index).removeClass('cur')
+        // 5.3 给目标圆点增加class.cur
+        $(".point>ul>li").eq(targetIndex).addClass('cur')
+        // 5.4 更新index
+        index = targetIndex
+      }
+
+      // 6 点击圆点跳转到相应的位置
+      $point.click(function(){
+        // 获取点击的index
+        var targetIndex = $(this).index()
+        console.log(index, targetIndex)
+        // 只有点击的不是当前页的圆点时，跳转翻页
+        if(targetIndex != index){
+          nextPage(targetIndex)  // 修改函数的参数类型,增加数值类型参数，需判断，更新底部圆点状态同理
+        }
+
+      })
+
+    })
+  </script>
+  
+</div>
+
+<div class="item">
+  <h3>效果</h3>
+  <div class="an an-1"></div>
+  <div class="an an-2"></div>
+  <div class="an an-3"></div>
+  <button id="btn-an-1">fadeIn/fadeOut/fadeToggle</button>
+  <button id="btn-an-2">slideUp/slideDown/slideToggle</button>
+  <button id="btn-an-3">show/hide/toggle</button>
+</div>
+<style>
+  .an{width:100px;height:100px;float:left;background:#f00;margin-right:20px;}
+  .an:nth-of-type(2){background-color: #091;}
+  .an:nth-of-type(3){background-color: #ff9800;}
+</style>
+<script>
+  $(function(){
+    $div1 = $(".an-1")
+    $div2 = $(".an-2")
+    $div3 = $(".an-3")
+    $btn1 = $("#btn-an-1")
+    $btn2 = $("#btn-an-2")
+    $btn3 = $("#btn-an-3")
+
+    $btn1.click(function() {
+      // 淡入淡出：改变的是opacity1->0->display:none
+      // $div1.fadeOut()
+      // $div1.fadeIn()
+      $div1.fadeToggle("slow", "linear", function(){
+        console.log('回调函数：效果结束后执行')
+      })
+    })
+
+    $btn2.click(function() {
+      // 滑动：改变的是 height
+      // $div1.slideUp()
+      // $div1.slideDown()
+       $div2.slideToggle(5000, function(){
+         console.log("回调函数：展开/收起后执行");
+       })
+    })
+
+    $btn3.click(function() {
+      // 显示隐藏：改变的是 opacity, width, height
+      // $div1.show()
+      // $div1.hide()
+      $div3.toggle(5000)
+    })
+  })
+</script>
+
+<div class="item">
+  <h3>自定义动画</h3>
+  <div class="an an-4"></div>
+  <div class="an an-5"></div>
+  <div class="an an-6"></div>
+  <div class="an an-7"></div>
+  <button id="btn-an-4">animate</button>
+  <button id="btn-an-4-2">animate指定移动的位置</button>
+  <button id="btn-an-4-3">animate指定移动的距离</button>
+  <button id="btn-an-5">stop</button>
+</div>
+<script>
+  $(function(){
+    $div4 = $(".an-4")
+    $div5 = $(".an-5")
+    $div6 = $(".an-6")
+    $btn4 = $("#btn-an-4")
+    $btn4_2 = $("#btn-an-4-2")
+    $btn4_3 = $("#btn-an-4-3")
+    $btn5 = $("#btn-an-5")
+    $btn6 = $("#btn-an-6")
+
+    $btn4.click(function() {
+      // div4 宽高都扩大到200px
+      // $div4.animate({
+      //   width: 200,
+      //   height: 200
+      // })
+
+      // 先扩大宽到200然后再扩大高度到200
+      $div4.animate({
+        width:200},4000).animate({height:200},4000)  // 链式调用
+    })
+
+    $btn4_2.click(function() {
+      $div4.animate({
+        left:100,
+        top:200
+      })
+    })
+
+    $btn4_3.click(function() {
+      $div4.animate({
+        left:'+100',
+        top:'-10'
+      })
+    })
+
+    $btn5.click(function() {
+      // 停止的是当前的动画，然后开始执行下一个动画
+      // 再次点击执行之前的动画，按照未完成顺序再次执行
+     $div4.stop()
+    })
+
+
+  })
+</script>
+
+<div class="item">
+  <h3>导航菜单</h3>
+  <div class="menu">
+    <ul>
+      <li>
+        <a href="">首页</a>
+      </li>
+      <li>
+        <a href="">关于我们</a>
+        <ul>
+          <li><a href="">公司简介</a></li>
+          <li><a href="">发展历程</a></li>
+          <li><a href="">大事记</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="">新闻中心</a>
+        <ul>
+          <li><a href="">公司新闻</a></li>
+          <li><a href="">最新消息</a></li>
+          <li><a href="">人事变动</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+<style>
+  .menu{height:40px;background:#091;float:left;}
+  .menu a{color:#fff;text-decoration:none;}
+  .menu ul,.menu ul li{display:inline-block;}
+  .menu>ul>li{position:relative;float:left;margin:0 10px;padding:0 5px;line-height:40px;}
+  .menu>ul>li>ul{position:absolute;left:0;top:41px;background:#091;display:none;}
+  .menu>ul>li>ul>li{padding:0 10px;line-height:30px;float:left;}
+  .menu>ul>li>ul>li>a{white-space:nowrap;font-size:13px;}
+</style>
+<script>
+  $(function(){
+    $(".menu>ul>li:has(ul)").hover(function(){
+      //$(this).children("ul").slideToggle()
+      // 分开写
+      $(this).children("ul").stop().slideDown()
+    },function(){
+      $(this).children("ul").stop().slideUp()
+    })
+  })
+</script>
+
+<div class="item">
+  <h3>jQuery插件</h3>
+  <script src="jQuery-plugin.js"></script>
+  <script>
+    $(function(){
+      console.log('开始执行jQuery插件:');
+      var res1 = $.min(1,2)
+      var res2 = $.max(1,2)
+      var res3 = $.leftTrim('    hello    ,word  ')
+      var res4 = $.rightTrim('    hello    ,word  ')
+      console.log(res1, res2, '***' + res3 + '***', '---' + res4 + '---')
+    })
+  </script>
+
+  <h3>通过自定义的jQuery插件实现全选/全不选/反选</h3>
+  <input type="checkbox" name="sport2" id="" value="football" />足球
+  <input type="checkbox" name="sport2" id="" value="basketball" />蓝球
+  <input type="checkbox" name="sport2" id="" value="badminton" />羽毛球
+  <input type="checkbox" name="sport2" id="" value="ping-pong" />乒乓球
+  <br/>
+  <input type="button"  id="checkedAll-2" value="全选" />
+  <input type="button"  id="checkedNotAll-2" value="全不选" />
+  <input type="button"  id="checkedRev-2" value="反选" />
+  <script>
+    $(function(){
+      var $items2 = $("input:checkbox[name='sport2']")
+      $("#checkedAll-2").click(function(){
+        $items2.checkAll()
+      })
+      $("#checkedNotAll-2").click(function(){
+        $items2.unCheckAll()
+      })
+      $("#checkedRev-2").click(function(){
+        $items2.reverseCheck()
+      })
+    })
+  </script>
+</div>
+
+<div class="item">
+  <h3>图片前后移动/大图切换/放大镜</h3>
+  <div class="img-m">
+    <img src="images/1.jpg" alt="" srcset="">
+    <span id="mask"></span>
+  </div>
+  <div class="img-wrap">
+    <a class="prev-disable">&lt;</a>
+    <div class="img-con">
+      <ul>
+        <li><img src="images/1.jpg" alt="" srcset=""></li>
+        <li><img src="images/2.jpg" alt="" srcset=""></li>
+        <li><img src="images/3.jpg" alt="" srcset=""></li>
+        <li><img src="images/4.jpg" alt="" srcset=""></li>
+        <li><img src="images/5.jpg" alt="" srcset=""></li>
+      </ul>
+    </div>
+    <a class="next-disable">&gt;</a>
+  </div>
+  <div class="img-big">
+    <img src="images/1.jpg">
+  </div>
+  <style>
+    .item{position:relative}
+    .img-m,.img-m img{width:180px;height:180px;}
+    .img-wrap{margin-top:5px;}
+    .img-wrap,.img-wrap ul,.img-wrap ul li,.img-wrap ul li img{height:50px;}
+    .img-wrap a{width:7px;padding:0 3px;line-height:50px;font-size:10px;float:left;border:1px solid #666;text-decoration:none;color:#666;}
+    .img-wrap a.prev-disable,.img-wrap a.next-disable{color:#eee;border-color:#eee}
+    .img-con{width:150px;height:52px;overflow: hidden;float:left;position:relative;}
+    .img-con ul{width:250px;height:52px;position:absolute}
+    .img-con ul li{float:left;}
+    .img-con ul li.cur{box-shadow:0 0 0 1px #f00;border-top:1px solid #f00;border-bottom:1px solid #f00;}
+    .img-big{width:180px;height:180px;position:absolute;left:182px;top:51px;overflow:hidden;display:none;}
+    .img-m{position:relative}
+    .img-m span{width:90px;height:90px;display:none;background:rgba(255,255,0 ,.4);position:absolute;left:0;top:0;}
+ </style>
+  <script>
+    $(function(){
+      var $prev = $(".img-wrap>a:first")
+      var $next = $(".img-wrap>a:last")
+      var $imgUl = $(".img-con>ul")
+      var imgNum = $(".img-con>ul>li").length
+      var imgWidth = $imgUl.children().first().width()
+      var imgShowNum = 3
+      var imgMoveCount = 0
+
+      // 加载完后 默认前/后 一页都不可点击
+      // 判断是否可以点击 下一张
+      if(imgNum > imgShowNum){
+        $next.removeClass('next-disable')
+      }
+      
+      // 下一张按钮绑定监听
+      $next.click(function () {
+        if(imgMoveCount === imgNum - imgShowNum){
+          return false
+        }
+        imgMoveCount ++
+        if(imgMoveCount === imgNum - imgShowNum){
+          $(this).addClass("next-disable")
+        }
+        $imgUl.css({
+          left: -imgWidth * imgMoveCount
+        })
+        $prev.removeClass("prev-disable")
+      })
+
+      // 前一张按钮绑定监听
+      $prev.click(function () {
+        if(imgMoveCount === 0){
+          return false
+        }
+        imgMoveCount --
+        if(imgMoveCount === 0){
+          $(this).addClass("prev-disable")
+        }
+        $imgUl.css({
+          left: -imgWidth * imgMoveCount
+        })
+        $next.removeClass("next-disable")
+      })
+
+      // 点击切换大图
+      $(".img-con>ul>li").hover(function(){
+        $(this).addClass("cur")
+        var curImg = $(this).children().attr('src')
+        var newImg = curImg.replace('.jpg', '-m.jpg')
+        $(".img-m>img").attr('src', curImg)
+      },function(){
+        $(this).removeClass("cur")
+      })
+
+      // 放大镜
+      var $imgNormal = $(".img-m")
+      var $mask = $("#mask")
+      var $imgBig = $(".img-big")
+      var maskWidth = $mask.width()
+      var maskheight = $mask.height()
+
+      $imgNormal.hover(function(){
+        // 1 显示 小黄块
+        $mask.show()
+
+        // 4 加载大图，需考虑加载慢
+        // 4.1大图加载完成前，loading.gif显示，鼠标移动不监听
+        var bigImgSrc = $(".img-m>img").attr('src').replace('-m.jpg', '-b.jpg')
+        $imgBig.children('img').attr('src', bigImgSrc)
+        $imgBig.show()
+        $("img-big>img").load(function(){
+          $(this).show()
+          console.log($(this).width())
+        })
+
+        // 2 监听鼠标移动事件，然后获取鼠标的偏移量
+        $imgNormal.mousemove(function(event){
+          // 3 计算坐标值
+          var left = 0
+          var top = 0
+          var eventLeft = event.offsetX
+          var eventTop = event.offsetY
+          var left = eventLeft - maskWidth/2
+          var top = eventTop - maskheight/2
+          console.log(eventLeft, eventTop, left, top)
+          $mask.css({  // 黄块区域定位
+            top: top,
+            left: left
+          })
+
+          // 4.2加载完成后，loading.gif隐藏，大图显示，执行鼠标移动监听
+          var bigWidth = $("img-big>img").width()
+        })
+      }, function(){
+        $mask.hide()
+        $imgBig.hide()
+      })
+
+
+    })
+  </script>
+</div>
+
 </body>
 </html>
