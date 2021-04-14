@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ES6~11</title>
+  <style>
+    .item{margin-top:10px;margin-bottom:20px;}
+    p{margin-bottom:4px;font-size:13px}
+    .box, input{width:200px;padding:10px;border:1px solid #091;font-size:12px;color:#434}
+    button{margin-top:8px;}
+    input{outline:none;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="item">
+      <h3>let</h3>
+      <p>注释：</p>
+      <div class="con">
+        <div class="box" id="box"></div>
+        <button class="btn">按钮1</button>
+        <button class="btn">按钮2</button>
+        <button class="btn">按钮3</button>
+      </div>
+    </div>
+    <div class="item">
+      <h3>动态import</h3>
+      <p>注释：import('模块文件路径').then(moudle => { moudle.fun()})</p>
+      <div class="con">
+        <button class="btn4" id="btn4">动态import</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // 1.let 变量
+    // - 不能重复声明
+    // - 块级作用域
+    // - 不存在变量提升
+    // - 不影响作用域链
+    let a
+    let b=100,c='abc'
+    console.log(typeof a, a, typeof b, b, typeof c, c);
+    // 解决var声明的变量在for循环按钮点击问题，闭包
+    var btns = document.getElementsByClassName("btn")
+    for(let i=0; i<btns.length; i++){
+      btns[i].onclick = function(){
+        this.style.background = '#f00'
+        console.log(i);
+      }
+    }
+
+    // 2.const 常量
+    // - 声明必须赋初始值
+    // - 常量潜规则大写
+    // - 常量的值不能修改
+    // - 块级作用域
+    // - 对数组和对象的元素修改不算对常量的修改
+    const NAME = 'Javascript'
+    console.log(NAME)
+
+    // 3.变量的解构赋值
+    // ES6允许按照一定的模式从数组和对象中提取值
+    // 3.1 数组的解构
+    const F4 = ['孙悟空', '唐僧', '猪八戒', '沙和尚', '白骨精']
+    let [sun, tang, zhu, sha, bai] = F4
+    console.log(sun, tang, zhu, sha, bai)
+
+    // 3.2 对象的解构
+    const XIYOUJI = {
+      name: '西游记',
+      author: '吴承恩',
+      book: function(){
+        console.log('四大名著');
+      }
+    }
+    let {name, author, book} = XIYOUJI
+    console.log(name, author, book)
+
+    // 4.模版字符串``,之前声明字符串['', ""]
+    // - 内容中可以换行
+    // - 变量直接拼接`${变量名}`
+    let str = `我是第一行
+               我是第二行`
+    console.log(str)
+    let str2 = `<ul>
+      <li>孙悟空</li>
+      <li>唐僧</li>
+      <li>猪八戒</li>
+      <li>沙和尚</li>
+    </ul>`
+    console.log(str2)
+
+    // 拼接变量 `${变量名}`
+    let fav = '孙悟空'
+    let text = `${fav}是西游记中我最喜欢的角色`
+    console.log(text)
+
+    // 5.简化对象写法
+    // ES6对象声明可以直接写入变量名和函数名
+    // 对象中属性:function可以省略
+    let objname = 'obj'
+    let fn = function(){
+      console.log('对象属性')
+    }
+    const OBJ = {
+      name: objname,
+      fun: fn,
+      fun2(){
+        console.log('我是ES6简写')
+      }
+    }
+    console.log(OBJ)
+
+    // 6.箭头函数
+    // - this是静态的（this 始终指向函数声明时所在作用域下的this的值）
+    // - 不能作为构造函数实例化对象
+    // - 不能使用argument变量
+    // - 简写1) 省略小括号-形参只有一个 2） 省略花括号-当代码体只有一调语句，rerurn 也必须省略
+
+    // 适合： 与this无关的回调，定时器， 数组的方法回调
+    // 不适合： 与this有关的回调，事件回调，对象的方法
+    // ES5声明函数
+    // var fn = function(){}
+    let fn2 = (a, b) => {
+      console.log(a+b)
+    }
+    fn2(1,2)
+    // 6.1 this作用域指向声明时作用域
+    function getName() {
+      console.log(this.name)
+    }
+    let getName2 = () => {
+      console.log(this.name);
+    }
+    window.name = '孙悟空'
+    const xyj = {
+      name: '唐僧'
+    }
+    // 直接调用  作用域是window
+    getName()  // 
+    getName2()
+
+    // call()调用
+    getName.call(xyj) // 作用域是xyj
+    getName2.call(xyj)  // 作用域是声明getName2 时的name
+
+    // 6.2 不能作为构造函数实例化
+
+    // 6.3 不能使用arguments
+    // let fn3 = () => {
+    //   console.log(arguments)
+    // }
+    // fn3(100,200,1)
+
+    // 6.4.1 简写1) 省略小括号-形参只有一个
+    let add = n => {
+      return n*n
+    }
+    console.log(add(3))  // 9
+
+    //  6.4.2 简写2) 省略花括号-当代码体只有一调语句，rerurn 也必须省略
+    let add2 = (x, y) =>  x+y
+    console.log(add2(3, 4))  // 6
+
+    // 6.5 箭头函数练习
+    // 6.5.1 事件回调
+    let box1 = document.getElementById('box')
+    box1.addEventListener('click', function(){
+      // var _this = this  // 保存this
+      // setTimeout(function()  {
+      //   console.log(this)
+      //   this.style.background = '#f00'
+      // }, 2000)
+      // 箭头函数方法
+      setTimeout(() => {
+        this.style.background = '#f00' // 箭头函数this指向声明时的作用域
+      }, 2000);
+    })
+
+    // 6.5.2  返回数组偶数
+    const arr = [100, 11,102,22]
+    // 完整写法：
+    //const res2 = arr.filter(function(item){ return  item%2===0} )
+    const res1 = arr.filter((item) => {
+      return item%2===0
+    })
+    // ES6 箭头函数简写 // 箭头函数一个参数省略参数(),一条语句省略return
+    const res2 = arr.filter(item => item%2===0)  
+    console.log(res1, res2);
+
+    // 7.函数参数默认值
+    // - 形参初始值，默认值参数，一般有默认值的参数考后
+    // - 与解构赋值结合使用
+    // 7.1
+    function add3(a,b,c=3){
+      return a+b+c
+    }
+    let res3 = add3(1,2)
+    console.log(res3)
+    // 7.2 与解构赋值结合使用
+    function connect({url='127.0.0.1', port, username, password}){
+      console.log(url, port, username, password)
+      // 没传输出：127.0.0.1 80 admin 123456
+    }
+    connect({ // 参数是对象
+      // url: 'localhost',
+      port: 80,
+      username: 'admin',
+      password: '123456'
+    })
+
+    // 8.rest
+    // 获取函数的实参，代替arguments,必须放在最后
+    // 参数先绑定前面的形参，多余的全部绑定rest，没有则是空数组
+    // 函数的 length 属性，不包括rest参数
+    // Rest参数可以被解构
+    // ES5获取实参
+    function plus(a, b){
+      console.log(arguments); // argument是对象
+    }
+    plus(1,99)
+    // rest  语法：...变量名
+    function plus2(a, b, c, ...args){
+      console.log(a+b+c, args);
+      // 数组处理更加灵活 filter, some, every, map 
+    }
+    plus2(1,88)  // NaN  []
+    plus2(1,88,99)  // 188 []
+    plus2(1,88,99,100,200,300)  // 188 [100,200,300]
+    // rest解构
+    function plus3(...[a, b, c]){
+      console.log(a+b+c, [a,b,c]);
+    }
+    plus3(1) // NaN  [1, undeifined, undifined]  参数不够
+    plus3(1,2,3)  // 6 [1,2,3]
+    plus3(1,2,3,4)  // 6 [1,2,3]  第四个参数多余
+
+    // Rest参数和arguments对象的区别：
+    // rest参数只包括那些没有给出名称的参数，arguments包含所有参数
+    // arguments 对象不是真正的数组，而rest 参数是数组实例，可以直接应用sort, map, forEach, pop等方法
+    // arguments 对象拥有一些自己额外的功能
+    
+
+    // 9.扩展运算符
+    // - 将数组转化为逗号分割的参数序列
+    // - 应用：1）数组的合并；2）数组的克隆；3）将伪数组转为数组
+    const xiyouji2 = ['孙悟空', '唐僧', '猪八戒', '沙和尚', '白骨精']
+    function role(a){
+      console.log(typeof a, a, a.length, arguments);
+    }
+    role(xiyouji2)  // 传的是length=5的一个数组
+    role(...xiyouji2)  // 传的是数组序列化的第一个参数=孙悟空
+    // 应用1:数组的合并
+    const a1 = ['a', 'b']
+    const a2 = [1, 2]
+    const a12 = [...a1, ...a2]  // 注意解构之间的逗号
+    console.log(a12);
+    // 应用2:数组的克隆
+    const a3 = [...a1]
+    console.log(a3);  // 浅拷贝
+    // 应用3:将伪数组转为数组
+    var btns = document.getElementsByTagName('button')
+    btnsArr = [...btns]
+    console.log(btnsArr)
+
+    // 10.Symbol
+    // - 值是唯一的，用来解决命名冲突问题
+    // - 不能与其他数据进行运算,包括自己
+    // - 不能遍历，可用
+    // 创建方法1
+    let s = Symbol()
+    console.log(s, typeof s)
+
+    let s2 = Symbol('a')
+    let s3 = Symbol('a')
+    console.log(s2 === s3)  // false
+
+    // 创建方法2
+    // Symbol.for 会注册到全局
+    let s4 = Symbol.for('a')
+    let s5 = Symbol.for('a')
+    console.log(s4 === s5)  // true
+    
+    // 应用1：给对象增加唯一的属性/方法
+    let game = {
+      name: '斗地主',
+      star: function(){
+        console.log('内部方法');
+      }
+    }
+    let methods = {
+      up: Symbol('up'),
+      down: Symbol('down')
+    }
+    // 与game,up/down = function(){} 相比，安全且避免方法名重复
+    game[methods.up] = function(){
+      console.log('通过symbol向game对象增加up方法');
+    }
+    game[methods.down] = function(){
+      console.log('通过symbol向game对象增加down方法');
+    }
+    console.log(game)
+
+    // 应用2: 第二种添加方式
+    let game2 = {
+      name: '斗地主',
+      [Symbol('say')]: function(){
+        console.log('叫地主');
+      }
+    }
+    console.log(game2)
+
+    // Symbol内置值
+    // symbol内置值的使用，都是作为某个对象类型的属性去使用；
+
+    // 11.迭代器
+    // iterator：为不同的数据提供统一的数据访问机制
+    // 工作原理symbol.iterator
+    // - 创建一个指针对象，指向当前数据结构的起始位置  xiyouji3[symbol.iterator]()
+    // - 第一次调用对象的next方法，指针自动后移一位，该方法返回{value,done}的对象
+    // - 不断调用next方法，直到最后一个内容
+    const xiyouji3 = ['孙悟空', '唐僧', '猪八戒', '沙和尚', '白骨精']
+    for(let i of xiyouji3){  // for in循环第一个值是下标 xiyouji3[i]
+      console.log(i) // 数组值
+    }
+    // for of实现过程
+    let iterator = xiyouji3[Symbol.iterator]()
+    let value1 = iterator.next()
+    let value2 = iterator.next()
+    console.log(value1,value2)
+
+    // 迭代器的应用：自定义遍历数据，返回对象中数组的值
+    const xiaoshuo = {
+      name: '西游记',
+      role: ['孙悟空', '唐僧', '猪八戒', '沙和尚', '白骨精'],
+      [Symbol.iterator]() { // 方法返回结果是对象
+        let index = 0
+        let  _this = this
+        return {
+          next: function(){
+            if(index < _this.role.length){
+              let res = {value: _this.role[index], done: false}
+              console.log(_this.role[index], index)
+              index++
+              return res
+            }else {
+              return {value: undefined, done: true}
+            }
+          }
+        }
+      }
+    }
+
+    for(let i of xiaoshuo){
+      console.log(i);
+    }
+    
+    // for  forEach(function(value,index)) for..in for...of
+    // forEach：ES5遍历数组，但不能使用break、continue和return语句
+    // for…in：遍历数组索引、对象的属性, 使用for…in遍历时，原型链上的所有属性都将被访
+    // for...of 遍历数组的值
+
+    // 12.生成器
+    // - 一个特殊的函数
+    // - 是iterator的一个对象
+    // - 可以出现yield语句（函数分隔符）
+
+    // 12.1 使用
+    function * people(){
+      console.log('生成器-第1段')
+      let first = yield '人有两件宝'  // 第1次next()执行位置
+      console.log(first, '生成器-第2段')
+      let second = yield '双手和大脑'  // 第2次next()执行位置
+      console.log(second, '生成器-第3段') // 第3次next()执行位置
+    }
+    let pe = people()
+    console.log(pe.next())   // 用迭代器的方式输出,返回value
+    console.log(pe.next(2))  
+    console.log(pe.next(3))  
+
+    console.log('----');
+    // 可以使用for of
+    for(let i of people()){
+      console.log(i);
+    }
+    console.log('----')
+    // 12.2 生成器函数参数
+    let pe2 = people()
+    // next()可以传入实参，参数为上一个yield 的返回值结果
+    console.log(pe2.next(123))
+    console.log(pe2.next(456)) // 456为第一个yield的返回值
+    console.log(pe2.next(789))
+
+    // 12.3 生成器函数实例1
+    // ES6提供的一种异步解决方案
+    // setTimeout()会产生回调地狱
+    function one (){
+      setTimeout(() => {
+        console.log('第1次异步')
+        request.next()
+      }, 1000);
+    }
+    function two (){
+      setTimeout(() => {
+        console.log('第2次异步')
+        request.next()
+      }, 2000);
+    }
+    function three (){
+      setTimeout(() => {
+        console.log('第3次异步');
+      }, 2200);
+    }
+    function * net(){
+      yield one()
+      yield two()
+      yield three()
+    }
+    let request = net()
+    request.next()
+    
+    // 12.3 生成器函数实例2
+    // 模拟获取 用户数据，订单数据，商品数据
+    // 根据用户获取该用户的订单信息。根据订单获取此订单下的商品信息
+    function getUser(){
+      setTimeout(() => {
+        let userData = '用户数据'
+        req.next(userData)  //  将获取到用户的信息传给第二次订单数据的参数
+      }, 3000);
+    }
+    function getOrder(){
+      setTimeout(() => {
+        let orderData = '订单数据'
+        req.next(orderData)
+      }, 1000);
+    }
+    function getGoods(){
+      setTimeout(() => {
+        let goodsData = '商品数据'
+        req.next(goodsData)
+      }, 1000);
+    }
+    function * requery(){
+      let user = yield getUser()
+      console.log('user=' + user)
+      let order = yield getOrder()
+      console.log('order=' + order)
+      let goods = yield getGoods()
+      console.log('goods=' + goods)
+    }
+    let req = requery()
+    req.next()
+
+    // 13.Promise
+    const p = new Promise((resolve, reject) => {
+      let success = 'Promise成功'
+      let error = 'Promise失败'
+      // resolve(success)
+      reject(error)
+    })
+    p.then(function(data){
+      console.log(data)
+    }, function(data){
+      console.log(data)
+    })
+
+    // 13.1 promise读取文件内容
+    // 引入fs模块
+    // const fs = require('fs')
+    // fs.readFile(011.md, (err, data) => {
+    //   err(function(){
+    //     console.log('读取失败')
+    //   }),
+    //   data(function(data){
+    //     console.log(data);
+    //   })
+    // })
+
+    // 13.2 promise封装ajax
+    const promise = new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest()
+      xhr.open('GET', 'http://127.0.0.1:8000/promise')
+      xhr.send()
+      xhr.responseType = 'json'
+      xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4){
+          if(xhr.status >= 200 && xhr.status < 300){
+            let data = xhr.response
+            resolve(data)
+          }else{
+            reject(xhr.status)
+          }
+        }
+      }
+    })
+    // console.log(promise.then())  
+    // then()方法返回值是promise对象,返回结果取决于promise对象的回调函数
+    // - 返回结果：非promise，状态为成功，返回值为对象的成功值
+    // - 返回结果：是promise，内部promise返回状态决定then的状态
+    // - 由于then()返回值是promise类型，因此可以链式调用
+    // console.log(promise.catch())
+    let res = promise.then(function(data){
+      return new Promise((resolve, reject) => {
+        resolve('success')
+        // reject('error')
+      })
+      console.log('promise封装ajax:成功',data);
+    },function(reason){
+      console.log('promise封装ajax:失败',reason);
+    }).catch((e) => {})
+    console.log(res)
+
+    // 13.3 promise解决回调地狱
+    // 要求：读取三个文件并合并,用响应数据代替
+    const books = new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest()
+      xhr.open('GET', "http://127.0.0.1:8000/book1")
+      xhr.send()
+      xhr.responseType = 'json'
+      xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4){
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve(xhr.response)
+          }else{
+            console.log('读取book1失败');
+          }
+        }
+      }
+    })
+    books.then(function(data){
+      // data 为promise返回的promise类型
+      // 利用then方法返回值是promise类型
+      console.log(data)
+      return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', "http://127.0.0.1:8000/book2")
+        xhr.send()
+        xhr.responseType = 'json'
+        xhr.onreadystatechange = function(){
+          if(xhr.readyState === 4){
+            if (xhr.status >= 200 && xhr.status < 300) {
+              resolve([data, xhr.response])
+            }else{
+              console.log('读取book2失败');
+            }
+          }
+        }
+      }) 
+    }).then(function(data){
+      console.log(data)
+      // 读取第3个
+      return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', "http://127.0.0.1:8000/book3")
+        xhr.send()
+        xhr.responseType = 'json'
+        xhr.onreadystatechange = function(){
+          if(xhr.readyState === 4){
+            if (xhr.status >= 200 && xhr.status < 300) {
+              // data.push(xhr.response) // 将第三本数据加入到数组中
+              resolve(data.push(xhr.response)) 
+            }else{
+              console.log('读取book3失败');
+            }
+          }
+        }
+      }) 
+    }).then(data => {
+      console.log(data)  // 打印三本书内容
+    }).catch( error => {
+      console.log('读取失败')
+    })
+
+
+    // 14.Set
+    let set = new Set()
+    let set2 = new Set([1, 2, 3, 3, 2])
+    console.log(set2)
+    // 增加元素
+    set2.add(4)
+    // 删除元素
+    set2.delete(2)
+    // 检测
+    set2.has(6)
+    console.log(typeof set, set2)
+    // 清空
+    set2.clear()
+    // 应用1：数组去重
+    let arr1 = [1,2,3,4,5,2,6,1,'a']
+    let result1 = [...new Set(arr1)]
+    console.log(result1)
+    // 应用2：交集
+    let arr2 = [1, 2, 3, 'a', 'b', 'c']
+    // 判断去重后的arr1是否在arr2
+    let result2 = result1.filter( data => {
+      if(new Set(arr2).has(data)){
+        return true
+      }
+    })
+    console.log(result2)
+    // 应用3：并集
+    let result3 = [...new Set([...arr1,...arr2])]
+    console.log(result3)
+    // 应用4：差集 1是主体
+    let result4 = result1.filter( data => {
+      if(!new Set(arr2).has(data)){
+        return true
+      }
+    })
+    console.log(result4);
+    
+    // 15.Map
+    // 类似对象，键值对的结合，键不限于字符串，各种类型数据都可以是键
+    // 实现了iterator
+    let m = new Map()
+    // 15.1添加元素
+    m.set('name', 'javascript')
+    m.set('setName', function(name){
+      console.log('Map的键值是对象');
+    })
+    let k = {
+      city: 'big City'
+    }
+    m.set(k, ['上海', '北京', '深圳', '广州'])
+    console.log(m.size,m)
+    // 15.2删除元素
+    m.delete('name')
+    console.log(m.size,m)
+    // 15.3获取
+    let mapGet = m.get('setName')
+    console.log(mapGet)
+    // 15.4清除
+    // m.clear()
+    // 15.5 遍历
+    for(let v of m){
+      console.log(v) // 数组
+    }
+    
+    // 16 class静态成员
+
+    // 17.class类
+    // 注意，构造函数中使用的 super() 只能在构造函数中使用，并且必须在使用 this 关键字前调用。
+    // 创建对象
+    function Phone(brand, price){
+      this.brand = brand
+      this.price = price
+    }
+    // 给对象添加方法
+    Phone.prototype.call = function(){
+      console.log('打电话')
+    }
+    // 实例化对象
+    let huawei = new Phone('华为', 5999)
+    huawei.call()
+    console.log(huawei)
+
+    // 17.1 构造函数继承 ES5 Phone()
+    function SmartPhone (brand, price, size){
+      Phone.call(this, brand, price)
+      this.size = size
+    }
+    // 设置子级构造函数的原型
+    SmartPhone.prototype = new Phone
+    SmartPhone.prototype.constructor = SmartPhone
+    
+    // 声明子级构造函数的方法
+    SmartPhone.prototype.playGame = function(){
+      console.log('我是智能手机，可以玩游戏');
+    }
+    let sp = new SmartPhone('xiaomi', 2999, 5.5)
+    console.log(sp)
+
+    // 17.2 class继承 父类Phone2
+    class Phone2{
+      // 构造方法
+      constructor(brand, price){
+        this.brand = brand
+        this.price = price
+      }
+      // 成员属性
+      call(){
+        console.log("我可以打电话，父类成员方法");
+      }
+    }
+
+    // extends class 继承
+    class SmartPhone2 extends Phone2{
+      // 构造方法
+      constructor(brand, price, color, size){
+        // 继承父类方法
+        super(brand, price)  // 等于 Phone.call(this, brand, price) 
+        //  子类独有方法
+        this.color = color
+        this.size = size
+      }
+      photo(){
+        console.log('我可以拍照-extends class父类中子类独有方法')
+      }
+      // 子类重写父类方法，不能调用同名方法即不能使用super
+      call(){
+        console.log('我重写父类call()方法');
+      }
+    }
+
+    const xiaomi = new SmartPhone2('小米', 1999, '黑色', 5.5)
+    xiaomi.call()  // 父类方法 
+    xiaomi.photo()  // 子类方法
+
+    // 17.3 class 的get和set
+    // 给对象绑定属性
+    class Phone3{
+      get price(){
+        console.log('get一般用来活动对象属性的动态值');
+        return 'class getter'
+      }
+      set price(c){
+        console.log(c, '属性被修改');
+      }
+    }
+    const newPhone = new Phone3()
+    newPhone.price  // 调用getter
+    newPhone.price = 1999  // 调用setter
+
+
+    // 18.数值扩展
+    // 最小值
+    n1 = Number.EPSILON  // 小于这个数表示相等
+    // 经典问题 js中 0.1 + 0.3 === 0.3 false
+    function equal(a, b){
+      if(Math.abs(a-b) < Number.EPSILON){
+        console.log('相等');
+      }else{
+        console.log('不相等');
+      }
+    }
+    equal(0.1+0.2, 0.3)  // 输出：相等
+
+    // 二进制，八进制， 十六进制
+    let n2 = 0b10101
+    let n3 = 0o777
+    let n4= 0xabc
+
+    // 检测是否是有限数
+    n5 = Number.isFinite(100/0)
+
+    // 检测是否是 NaN
+    n6 = Number.isNaN(2)
+
+    // 字符串转数值
+    n7 = Number.parseInt(7.123)
+    n8 = Number.parseFloat('1234a9873')
+
+    // 判断是否是整数
+    n9 = Number.isInteger(7.1)
+    n10 = Number.isInteger(7)
+
+    // 去掉数值的小数位
+    n11 = Math.trunc(3.223123)
+
+    // 判断数值是 正数，负数， 零
+    n12 = Math.sign(99)
+    n13 = Math.sign(0)
+    n14 = Math.sign(-99)
+
+    console.log(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14)
+
+
+    // 19.对象方法扩展
+    // 19.1 Object.is  判断两个值是否完全相等
+    // 功能类似全等 ===，区别在NaN
+    console.log(Object.is(NaN, NaN)) // true
+    console.log(NaN === NaN) // false
+
+    // 19.2 Object.assign 对象的合并
+    // 重复的参数，后面的覆盖前面的参数值
+    const server1 = {
+      host: 'localhost',
+      port: 80,
+      name: 'username',
+      pwd: '123456'
+    }
+    const server2 = {
+      host: '127.0.0.1',
+      port: 80,
+      name: 'admin',
+      pwd: 'admin123',
+      form: 'POST'
+    }
+    console.log(Object.assign(server1, server2))
+
+    // 19.3 object.setPrototypeOf Object.getPrototypeOf
+    const city = {
+      name: ['BeiJing', 'ShangHai', 'GuangZhou']
+    }
+    const county = {
+      county: 'CHINA'
+    }
+    Object.setPrototypeOf(city, county)
+    console.log(city)
+    Object.getPrototypeOf(city)
+
+  </script>
+  
+  
+  <script type="module">
+  // 20.模块化 需要live serve
+  // 优点：防止命名冲突，代码复用， 高维护性
+  // 已有规范： CommonJS(NodeJS,Browserify) AMD(requireJS) CMD(seaJS)
+  // ES6模块化 export import
+
+  // 20.1 引入模块化文件
+  // 1 通用导入方式 
+  // import * as m from "./module.js"
+  // console.log(m.name)
+  // m.fun()
+
+  // 2 解构赋值形式，别名
+  // 引入分别暴露
+  // import {name, fun} from "./module.js"
+  // console.log(name, fun)
+
+  // 引入统一暴露
+  // import {name2 as nameNew, fun2 as fun2New} from "./module.js"
+  // console.log(nameNew, fun2New)
+
+  // // 引入默认暴露
+  // import {default as m3} from "./module.js"
+
+  // 3 简便形式，只能针对默认暴露
+  import m3 from "./module.js"
+  console.log(m3.name3, m3.fun3);
+  </script>
+
+  <script src="./app.js" type="module">
+  // html中引入使用，不方便管理
+  // 可抽离出独立文件
+
+  // 20.2 babel
+  // 1. 安装工具 babel-cli babel-preset-env browserify(webpack)
+  // 2. npx babel src/js -d dist/js --preset-babel-env
+  // 3. 打包 npx browserify dist/js/app.js -o dist/boundle.js
+  </script>
+
+
+<script>
+  // ES7 新特性
+  // 21 Array.prototype.includes
+  // 检测数组中是否包含某个元素，返回布尔类型
+  // 不同于indexOf返回下标
+  const xiyoujii = ['孙悟空','唐僧','猪八戒','沙僧']
+  console.log(xiyoujii.includes('唐僧'))
+
+  // 指数操作  等价于Math.pow()
+  console.log(2 ** 10);
+  console.log(Math.pow(2, 10));
+
+
+  // ES8
+  // 22.1 async
+  // 返回值是promise对象
+  // promise对象的结果由async函数执行的返回值决定
+  async function fun(){
+    // 1 返回的类型为非promise对象，则返回结果为成功
+    // return 'asyncES6'
+    // 2 抛出错误，结果是失败的promise
+    // throw new Error('Error') 
+    // 3 返回类型为promise对象，async的结果由promise对象的结果决定
+    return new Promise((resolve , reject) => {
+      resolve('成功');  // status:fullfilled value:成功
+      // reject('失败')  // status:rejected  value:失败
+    })
+  }
+  const info = fun()
+  console.log(info)
+
+  info.then(value => {
+    console.log("async：成功")
+  },reason => {
+    console.log("async：失败")
+  })
+
+  // 22.2 await
+  // await必须写在async函数中
+  // await右侧的表达式一般为promise对象
+  // await返回值是promise的成功的值
+  // await的promise失败了，就会抛出异常，需要通过try...catch 捕获处理
+  const p1 = new Promise((resolve, reject) => {
+    // resolve('await成功的promise对象')
+    reject('await失败的promise对象')
+  })
+  async function main(){
+    try{
+      let res = await p1
+      console.log(res) 
+    } catch(e){
+      console.log('await失败，try...catch捕获处理')
+    }
+  }
+  main();
+
+  // 22.3 async和await结合
+  function sendAJAx(url){
+    // 返回必须是promise对象
+    return new Promise((resolve, reject) => {
+      // 创建对象
+      const x = new XMLHttpRequest
+      // 初始化
+      x.open('GET', url)
+      // 发送
+      x.send()
+      // 事件绑定
+      x.onreadystatechange = function(){
+        if(x.readyState === 4){
+          if(x.status >= 200 && x.status <300){
+            resolve(x.response)
+          }else{
+            reject(x.status)
+          }
+        }
+      }
+    })
+  }
+
+  // promise...then 方法
+  sendAJAx('http://127.0.0.1:8000/book11').then(value => {
+    console.log(value)
+  },reason => {
+    console.log('AJAX接口调用失败');
+  })
+
+  // async 和await 方法
+  async function ajaxMain(){
+    let result = await sendAJAx("http://127.0.0.1:8000/book3")
+    try {
+      let result2 = await sendAJAx("http://127.0.0.1:8000/book5")  // 不存在
+    } catch (e){
+      console.log('ERROR：async 和await发送AJAX');
+    }
+    console.log(result);
+    console.log(result2);
+  }
+  ajaxMain()
+
+
+  // 22.4 Object.keys/values/entries
+  // 对象扩展方法
+  const tech = {
+    name: "skill",
+    language: ['HTML', 'CSS', 'Javascript', 'VUE']
+  }
+  console.log(Object.keys(tech));
+  console.log(Object.values(tech));
+  console.log(Object.entries(tech));  // 返回二维数组
+  // 作用：创建Map
+  const map = new Map(Object.entries(tech))
+  console.log(map);
+
+  // 22.5 Object.getOwnPrototypeDescriptors
+  // 返回：对象类型的对象属性的描述
+  console.log(Object.getOwnPropertyDescriptors(tech));
+  const obj0 = Objecct.create(null, {
+    name: {
+      value: "skill",
+      // 属性
+      writable: true,
+      configurabe: true,
+      enumerable: true
+    },
+    language: ['HTML', 'CSS', 'Javascript', 'VUE']
+  })
+</script>
+
+<script>
+  // ES9
+  // 23 Rest参数
+  // Rest参数与扩展运算符在ES中已经引入，不过只针对数组
+  // ES9 中提供了对象的实现
+
+  // 23.1 对象的Rest参数
+  // 对象方式
+  // function connectNet({host, port, username, pwd}){
+  //   console.log(host, port, username, pwd);
+  // }
+  // 对象解构
+  function connectNet({host, port, ...use}){
+    console.log(host, port, use, use.username, use.pwd);
+  }
+  connectNet({
+    host:"http:127.0.0.1",
+    port: 80,
+    username:"root",
+    pwd: "admin123"
+  })
+
+  // 23.2 对象扩展运算符
+  // 对象的合并
+  const skill1 = {
+    wugong1: '降龙十八掌'
+  }
+  const skill2 = {
+    wugong2: '九阳真经'
+  }
+  const skill3 = {
+    wugong3: '乾坤大挪移'
+  }
+
+  const skillAll = {...skill1, ...skill2, ...skill3}
+  console.log(skillAll)
+
+
+  // 24 正则扩展
+  // 24.1 命名捕获分组
+  // 返回：数组 0原内容，1第一个分组内容
+  let strx = '<a href="http://www.baidu.com">百度</a>'
+  // 提取 url 与 标签文本
+  const  exg = /<a href="(.*)">(.*)<\/a>/
+  const resultExg = exg.exec(strx)
+  console.log(resultExg, resultExg[1], resultExg[2])
+
+  // 命名捕获分组 ?<name>
+  // 返回：对象类型
+  const  exg2 = /<a href="(?<url>.*)">(?<name>.*)<\/a>/
+  const resultExg2 = exg2.exec(strx)
+  console.log(resultExg2.groups, resultExg2.groups.name, resultExg2.groups.url)
+
+  // 24.2 反向断言(?=)
+  // 判断匹配结果，前后边唯一性识别
+  // 返回：数组[0结果, 1index下标, 2input原对象]
+  let stry = "abc123opq654xyz"
+  // 正向断言：根据后面的条件匹配
+  const exgy1 = /\d+(?=x)/  // 判断数字后有x字符的
+  const resultExg3 = exgy1.exec(stry)
+  console.log(resultExg3)
+
+  // 反向断言：根据前面的条件判断
+  const exgy2 = /(?<=q)\d+/
+  const resultExg4 = exgy2.exec(stry)
+  console.log(resultExg4)
+
+  // 24.3 dotAll模式
+  // dot = . 字符. 含义：除换行以外的任意单个字符
+  const strz = `
+    <ul>
+      <li>
+        <a href="http:127.0.0.1/book1">西游记</a>
+        <p>孙悟空，唐僧，猪八戒，沙和尚</p>
+      </li>
+      <li>
+        <a href="http:127.0.0.1/book2">红楼梦</a>
+        <p>贾宝玉，林黛玉，薛宝钗，王熙凤</p>
+      </li>
+    </ul>`
+  // 全局匹配
+  const exgz = /<li>.*?<a\s+href="(.*?)">(.*?)<\/a>.*?<p>(.*?)<\/p>/gs
+  let resultz
+  let resultArray = []
+  while(resultz = exgz.exec(strz)){
+    resultArray.push({url:resultz[1], name:resultz[2], role:resultz[3],})
+  }
+  console.log(resultArray)
+
+  // ES10
+  // 25 Object.fromEntries
+  // 接收值：二维数组/Map
+  // 返回类型：对象
+
+  // 1 二维数组
+  const arr22 = Object.fromEntries([
+    ['name','红楼梦'],
+    ['role','贾宝玉，林黛玉，薛宝钗']
+  ])
+  console.log(arr22)
+
+  // 2 Map
+  const arr23 = new Map()
+  arr23.set('书名','红楼梦')
+  arr23.set('角色','贾宝玉，林黛玉，薛宝钗')
+  arr23.set('书名','西游记')
+  arr23.set('角色','孙悟空，唐僧，猪八戒，沙和尚')
+  const result23 = Object.fromEntries(arr23)
+  console.log(result23)
+
+  // 26 字符串扩展trimSatr/trimend
+  // 清楚字符串空白字符
+  let strTrim = '  abc  123   '
+  console.log(strTrim.trimStart())
+  console.log(strTrim.trimEnd())
+
+  // 27 flat/flatmap
+  // 将多维数组转为低维数组 
+  // flat() 默认降低一维，flat(x)降低x维
+  // flatMap() 将Map()返回结果转为一维数组
+  const arr27 = [1,2,3,4,[5,6]]
+  console.log(arr27.flat())  // [1,2,3,4,5,6]
+  const arr271 = [1,2,3,4,[5,6,[7,8]]]
+  console.log(arr271.flat())  // [1,2,3,4,5,6,[7,8]]
+  console.log(arr271.flat(2))  // [1,2,3,4,5,6,7,8]
+  const str272 = [1,2,3]
+  const res272 = str272.map(num =>  [num*2])
+  const res273 = str272.flatMap(num =>  [num*2])
+  console.log(res272,res273);
+
+  // 28 symbol.prototype.description
+  const sym = Symbol('symbol description')
+  console.log(sym.description);
+
+
+  // ES11
+  // 29 
+  // 29.1 私有属性
+  class People {
+    name;  // 共有
+    #age;  // 私有
+    constructor(name, age){
+      this.name = name
+      this.#age = age
+    }
+    info(){
+      let infoText = '信息：' + this.name + ',年龄：' + this.#age 
+      console.log(infoText) 
+    }
+  }
+  const p_info = new People('李红', 36)
+  console.log(p_info)
+  p_info.info()
+
+  // 29.2 Promise.allSettled
+  // 接收promise数组
+  // 返回类型：数组，
+  // 返回结果：总是成功返回，值为每个promise的返回结果
+  // promise.all()所有成功才返回成功
+  const pro1 = new Promise((resolve, reject) => {
+    resolve('promise1成功')
+    // reject('promise1失败')
+  })
+  const pro2 = new Promise((resolve, reject) => {
+    // resolve('promise2成功')
+    reject('promise2失败')
+  })
+  const proAll = Promise.allSettled([pro1, pro2])  // 返回所有promise结果
+  const proAll2 = Promise.all([pro1, pro2])  // 全部成功返回全部结果，失败只返回第一个失败的结果
+  console.log(proAll);
+  console.log(proAll2);
+
+  // 29.3 String.prototypt.matchAll
+  // 正则批量匹配
+  const str29 = `
+    <ul>
+      <li>
+        <a href="http:127.0.0.1/book1">西游记</a>
+        <p>孙悟空，唐僧，猪八戒，沙和尚</p>
+      </li>
+      <li>
+        <a href="http:127.0.0.1/book2">红楼梦</a>
+        <p>贾宝玉，林黛玉，薛宝钗，王熙凤</p>
+      </li>
+    </ul>`
+    const exg29 = /<li>.*?<a\s+href="(.*?)">(.*?)<\/a>.*?<p>(.*?)<\/p>/gs
+    // const result29 = exg29.exec(str29)
+    // console.log(result29)
+    const result291 = str29.matchAll(exg29)
+    for(let r of result291){
+      console.log(r)
+    }
+    
+
+    // 29.4 可选链操作符?.
+    // 解决深层访问对象属性调用
+    function main29(config){
+      // const dburl = config.SQLServe.url  // 链式访问太长
+      // 减少层层判断，即便不存在，也不报错，返回undefined
+      // 删掉main29()中的对象也不报错
+      const dburl = config?.SQLServe?.url
+      console.log(dburl);
+    }
+
+    main29({
+      // SQLServe:{
+      //   url:'127.0.0.1',
+      //   port: '80',
+      //   user: 'admin',
+      //   pwd: '123456'
+      // },
+      // NySql:{
+      //   url:'22.0.0.22',
+      //   port: '8080',
+      //   user: 'admin123',
+      //   pwd: '654321'
+      // }
+    })
+
+    // 29.5 动态import
+    // 按需加在
+    // import()返回promise对象
+    let btn4 = document.getElementById('btn4')
+    btn4.onclick = function(){
+      import('./module.js').then( result => {
+        console.log(result.default)
+        result.default.fun4() // 执行动态导入的模块文件中的函数
+      })
+    }
+
+    // 29.6 BigInt
+    // BigInt 不能与int运算，int需转为BigInt 
+    // 数字n
+    let bignum = 520n
+    console.log(bignum, typeof(bignum))
+    // 函数 整数转为大整数
+    let n = 123
+    console.log(BigInt(n))
+    let MAX = Number.MAX_SAFE_INTEGER
+    console.log(MAX, MAX+1, MAX+2); // MAX+1正确，MAX+2 计算错误
+    // 9007199254740991 9007199254740992 9007199254740992
+
+    console.log(BigInt(MAX),BigInt(MAX)+BigInt(2), BigInt(MAX) + BigInt(2));
+    // 9007199254740991n 9007199254740993n 9007199254740993n
+
+   // 29.7 globalThis全局绝对对象
+   // 始终指向全局对象
+   // nodejs指向global
+   console.log(globalThis)
+</script>
+
+</body>
+</html>
