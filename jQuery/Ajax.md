@@ -287,5 +287,252 @@ box6_2.onclick = function(){
 
 ### 重复发送请求
 
+定义发送状态标识 isSending
 
+```javascript
+// 重复请求（增加标识变量）
+var isSending = false   // 判断是否正在发送
+box6_1.onclick = function(){
+  xhr6 = new XMLHttpRequest()
+  if(isSending){
+    xhr6.abort() // 如果上一个返回已发送但没返回，有开始新的请求，则取消上一个请求
+  }
+  isSending = true  // 修改发送状态的标识
+  xhr6.open('GET', 'http://127.0.0.1:8000/net?t='+Date.now())  //  解决IE缓存
+  xhr6.send()
+  xhr6.onreadystatechange = function(){
+    if(xhr6.readyState === 4){
+      // 已发送成功且返回，则可以再次发送请求
+      isSending = false
+      if(xhr6.status >= 200 && xhr6.status <300){
+        box6.innerHTML += xhr6.response
+      }
+    }
+  }
+}
+```
+
+
+
+## jQuery发送
+
+GET/POST/AJAX
+
+> POST请求的参数没有在URL后面
+
+```javascript
+// GET/POST 格式：$.get/post('地址', {对象参数}, fn响应回调函数)
+$.get('http://127.0.0.1:8000/jquery', {a:100, b:200}, function(data){
+	//console.log(data);
+	$('.box7').html(data)
+}, 'json')  // 设置响应体数据类型
+
+// ajax
+$.ajax({
+  url: 'http://127.0.0.1:8000/jquery',
+  date: {a:100, b:200},
+  type: 'GET',
+  dataType: 'json',
+  timeout: 2000, // 超时
+  // headers:{  // 自定义头部信息
+  // },
+  success: function(data){
+    $('.box7').html(data.tag)
+  },
+  error: function(){
+    $('.box7').html('出错了')
+  }
+})
+```
+
+## Axios发送
+
+```js
+// axios.get(url, {参数, 请求头, 请求体}).then( =>{})
+// axios.post(url, {请求体}, {参数, 请求头,}).then( =>{})
+```
+
+
+
+```js
+// axios get
+// 配置baseURL
+axios.defaults.baseURL = 'http://127.0.0.1:8000'
+btn8_1.onclick = function(){
+  axios.get('/jquery', {
+    params: { // url参数
+    id: 100,
+    uis:123456
+    },
+    // 请求头信息
+    // headers: {
+    //   name: 'axios',
+    //   message: 'ajax-axios'
+    // },
+  }).then( data => {
+  	console.log(data);
+  })
+}
+```
+
+
+
+```js
+// 通用
+axios({
+  method: 'post',
+  url: '/jquery',
+  params: {
+    id: 300,
+    uid: 'admin200'
+  },
+  data: {
+    username: 'admin',
+    password: '123'
+  }
+}).then( data => {
+  console.log(data);
+})
+```
+
+
+
+## Fetch发送
+
+```js
+// fetch(url, {方式， 请求头， 请求体}).then().then()
+fetch('http://127.0.0.1:8000/fetch',{
+  method: 'POST',
+  headers: {
+
+  },
+  body: 'username=admin',
+}).then( data => {  // 返回结果对象
+  //console.log(data);
+  //return data.text()
+  return data.json() // json转对象
+}).then( data => {
+  console.log(data);
+  box9.innerHTML = data.name
+})
+```
+
+
+
+## 跨域解决方案
+
+### jsonp
+
+借助script标签引用，只支持GET请求
+
+```html
+<!-- 跨域 jsonp -->
+<script>
+  // 处理返回的字符串
+  function handle(value){
+    var box10 = document.getElementsByClassName("box10")[0]
+    box10.innerHTML = value.name
+  }
+</script>
+
+<!-- 返回的是一段js代码，标签无法执行，需要放入到script的里执行 -->
+<!-- 以下测试的是跨域引入js文件，返回的事一段代码 -->
+<!-- <script src="http://127.0.0.1:5500/jQuery/send.js"></script>   -->
+
+<!-- ajax 服务端数据 -->
+<!-- js标签结果返回的是一段代码，无法解析执行，应该返回的是标准js代码 -->
+<script src="http://127.0.0.1:8000/jsonp"></script> 
+<!-- 返回结果: 函数调用 handle({"name":"jsonp"}) -->
+<!--   参数是: 数据 -->
+```
+
+```js
+// jsonp
+app.get('/jsonp', (request, response) => {
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  var result = {
+    name: 'jsonp',
+  }
+  // 将数据转化为字符串
+  var str = JSON.stringify(result)
+  // 返回结果：直接返回数据不能处理
+  // 返回的是字符串(定义的函数)
+  response.send(`handle(${str})`);
+})
+```
+
+
+
+### jquery jsonp实例
+
+**html**
+
+```js
+<script>
+  var $checke = $('#jquery-jsonp')
+  var baseURL = 'http://127.0.0.1:8000'
+  $checke.blur(function(){
+    // ?callback-?  必传，服务端去处理
+    $.getJSON(baseURL+'/jquery-jsonp?callback=?', function(data){
+      // 处理callback注册的回调函数
+      $checke.val(data.name)
+    })
+  })
+</script>
+```
+
+**服务端**
+
+```js
+// jquery jsonp
+app.get('/jquery-jsonp', (request, response)  => {
+  var jqueryJsonpData = {
+    name: 'queryJsonpData',
+    data: '我是Jquery的方式跨域'
+  }
+  // jQuery注册了callback的函数
+  // 接受callback
+  var queryCallback = request.query.callback
+  var str = JSON.stringify(jqueryJsonpData)
+  response.send(`${queryCallback}(${str})`)
+})
+```
+
+
+
+### CORS[官方推荐]
+
+```js
+<script>
+  // cors解决跨域
+  // 需在服务端设置响应头
+  $('#cors').blur(function(){
+  var xhr11 = new XMLHttpRequest()
+  xhr11.open('POST', 'http://127.0.0.1:8000/cors')
+  xhr11.send()
+  xhr11.onreadystatechange = function(){
+    if(xhr11.readyState === 4){
+      if(xhr11.status >= 200 && xhr11.status < 300){
+        console.log(xhr11.response);
+      }
+    }
+  }
+})
+</script>
+```
+
+**服务端**
+
+```js
+// cors
+app.all('/cors', (request, response)  => {
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  response.setHeader('Access-Control-Allow-Headers', '*')
+  response.setHeader('Access-Control-Allow-Method', '*')
+  var jqueryJsonpData = {
+    name: 'cors',
+  }
+  response.send(jqueryJsonpData)
+})
+```
 
