@@ -52,6 +52,62 @@ app.get('/net', (request, response) => {
   }, 3000);
 })
 
+// jQuery 发送
+app.all('/jquery', (request, response) => {
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  var ajaxJson = {
+    name: 'jQuery发送',
+    way: 'SET/POST',
+    tag: 'Ajax方式'
+  }
+  response.send(ajaxJson);
+})
+
+// fetch 发送
+app.all('/fetch', (request, response) => {
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  var result = {
+    name: 'fetch',
+  }
+  response.send(result);
+})
+
+// jsonp
+app.get('/jsonp', (request, response) => {
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  var result = {
+    name: 'jsonp',
+  }
+  // 将数据转化为字符串
+  var str = JSON.stringify(result)
+  // 返回结果：直接返回数据不能处理
+  response.send(`handle(${str})`);
+})
+
+// jquery jsonp
+app.get('/jquery-jsonp', (request, response)  => {
+  var jqueryJsonpData = {
+    name: 'queryJsonpData',
+    data: '我是Jquery的方式跨域'
+  }
+  // jQuery注册了callback的函数
+  // 接受callback
+  var queryCallback = request.query.callback
+  var str = JSON.stringify(jqueryJsonpData)
+  response.send(`${queryCallback}(${str})`)
+})
+
+// cors
+app.all('/cors', (request, response)  => {
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  response.setHeader('Access-Control-Allow-Headers', '*')
+  response.setHeader('Access-Control-Allow-Method', '*')
+  var jqueryJsonpData = {
+    name: 'cors',
+  }
+  response.send(jqueryJsonpData)
+})
+
 // 4 监听端口启动服务
 app.listen(8000, () => {
   console.log('服务已启动，运行中……');
