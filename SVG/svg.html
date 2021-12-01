@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVG 可缩放矢量图形</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .wrap {
+      width: 100%;
+      float: left;
+    }
+
+    h4 {
+      margin: 40px 0 0 20px;
+      float: left;
+    }
+
+    button {
+      margin: 20px;
+      padding: 4px 16px;
+      background: #5e7ce0;
+      border: none;
+      border-radius: 3px;
+      color: #fff;
+    }
+
+    .svg-item {
+      width: calc(50% - 40px);
+      min-width: 300px;
+      min-height: 130px;
+      float: left;
+      margin: 20px;
+      background: #e9edfa;
+    }
+
+    .svg-item p {
+      height: 36px;
+      font-size: 13px;
+      color: #252b3a;
+      margin: 10px;
+    }
+    .svg-item-chart p{height:auto;line-height:1.6}
+
+    .svg-item svg {
+      float: left;
+      background: #edfff9;
+    }
+
+    .bg-svg {
+      fill: #5e7ce0;
+    }
+
+    .bg-svg-2 {
+      fill: #50d4ab;
+      stroke: #5D887D;
+      stroke-width: 10px;
+      stroke-opacity: 0.5;
+    }
+
+    /* 支持css属性 */
+    .line {
+      transition: all 2s;
+      /* transform:rotate(45deg); */
+      transform-origin: center;
+      animation: xunzhuan 60s linear infinite;
+    }
+
+    @keyframes xunzhuan {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    path:hover {
+      fill: #5D887D;
+      stroke: #5e7ce0;
+    }
+
+    /* text文本标签 */
+    .text {
+      fill: #5e7ce0;
+      stroke: #50d4ab;
+      stroke-width: 1;
+    }
+
+    .text-2 {
+      fill: none;
+      stroke: #50d4ab;
+      stroke-width: 1px;
+      font-size: 30px;
+      font-weight: 900;
+      text-shadow: 0px 2px 5px #5D887D;
+    }
+
+    #sym01:hover {
+      fill: #f66f6a;
+      stroke: #f00;
+      transform: rotate(360);
+    }
+
+    #g1 {
+      fill: #50d4ab;
+      stroke: #5D887D;
+      stroke-width: 2px;
+      stroke-opacity: 0.69;
+      transition: all 2s ease-out;
+      transform-origin: center;
+    }
+
+    #g1:hover {
+      fill: #f66f6a;
+      stroke: #f00;
+      transform: rotate(360);
+    }
+
+    #defs1 {
+      fill: #5e7ce0;
+      stroke: #50d4ab;
+      stroke-width: 1px;
+    }
+
+    #defs1:hover {
+      fill: #f66f6a;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="svg-item">
+      <p>默认宽高 300 * 150</p>
+      <svg>
+        <circle id="svg01" cx="32" cy="32" r="30" fill="#f66f6a" stroke="#333" stroke-width="2px">
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>相对宽高</p>
+      <svg width="100%" height="100%">
+        <circle id="svg02" cx="32" cy="32" r="30" fill="#f66f6a" stroke="#333" stroke-width="2px">
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>固定宽高</p>
+      <svg width="100" height="100">
+        <circle id="svg03" cx="32" cy="32" r="30" fill="#f66f6a" stroke="#333" stroke-width="2px"></circle>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>viewBox="x, y, width, height" 截取svg区域放大至当前svg大小</p>
+      <svg width="100" height="100" viewBox="0,0,32,32">
+        <circle id="svg04" cx="32" cy="32" r="30" fill="#f66f6a" stroke="#333" stroke-width="2px"></circle>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>circle</p>
+      <svg>
+        <circle id="svg04" cx="32" cy="32" r="30" fill="#f66f6a" stroke="#333" stroke-width="2px"></circle>
+        <circle id="svg04" cx="32" cy="32" r="20" fill="#fac20a" stroke="#5e7ce0" stroke-width="2px"></circle>
+        <circle id="svg04" cx="150" cy="52" r="50" fill="#fac20a" stroke="#5e7ce0" stroke-width="2px"></circle>
+        <circle id="svg04" cx="260" cy="32" r="30" class="bg-svg" stroke="#333" stroke-width="2px"></circle>
+        <circle id="svg04" cx="260" cy="98" r="30" class="bg-svg-2"></circle>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>ellipse</p>
+      <svg>
+        <ellipse cx="102" cy="52" rx="100" ry="50"
+          style="fill:#f66f6a;stroke:#985C5A;stroke-width:3px;stroke-opacity:.9"></ellipse>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>rect</p>
+      <svg>
+        <rect width="130" height="70" x="5" y="5" class="bg-svg-2"></rect>
+        <rect width="130" height="70" x="150" y="5" rx="6" ry="6" class="bg-svg-2"></rect>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>line</p>
+      <svg width="300px" height="300">
+        <line x1="150" y1="20" x2="150" y2="150" style="stroke:#f00;stroke-width:3px;stroke-opacity:0.2"></line>
+        <line x1="70" y1="70" x2="150" y2="150" class="line" style="stroke:#f00;stroke-width:3px;"></line>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>polyline</p>
+      <svg width="300px" height="300">
+        <polyline points="10,100 70,170 130,100 190,170 250,100" style="fill:none;stroke:#50d4ab;stroke-width:3px;">
+        </polyline>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>polygon</p>
+      <svg width="300px" height="300">
+        <polygon points="10,100 70,170 130,30 190,170 250,100" style="fill:#f66f6a;stroke:#50d4ab;stroke-width:3px;">
+        </polygon>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>path</p>
+      <svg width="300px" height="300">
+        <path d="M 10,16 L 20,40 L 50,60 L 100,40" style="fill:#f66f6a;stroke:#50d4ab;stroke-width:2px;"></path>
+        <path d="M 10,116 L 20,140 L 50,160 L 100,140 Z" style="fill:#f66f6a;stroke:#50d4ab;stroke-width:2px;"></path>
+        <path d="m 10,16 l 20,40 l 50,60 l 100,40 z" style="fill:none;stroke:#50d4ab;stroke-width:2px;"></path>
+        <!-- <path d="M70 10 L30 50 L50 20 Z" style="fill:#f66f6a;stroke:#50d4ab;stroke-width:3px;"></path> -->
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>path 矩形</p>
+      <svg width="300px" height="300">
+        <path d="M 10,10 H 60, V 60, H 10, z" style="fill:#f66f6a;stroke:#50d4ab;">
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>path 弧形</p>
+      <svg width="300px" height="300">
+        <!-- <path d="M 0 300, L 300 0" style="stroke:#50d4ab;stroke-opacity:0.2"/> -->
+        <path d="M 40 150, A 100 50 90 0 1 140 150" style="fill:transparent;stroke:#50d4ab;">
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>text</p>
+      <svg width="300px" height="300">
+        <text x="50" y="70" class="text" style="font-size:14px;" transform="rotate(45)"
+          transform-origin="center">svg文本标签</text>
+        <text x="150" y="70" class="text-2" transform="rotate(45)">svg文本标签</text>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>textpath，沿路径显示，文本超出路径不显示。</p>
+      <svg width="300px" height="300">
+        <defs>
+          <!-- 不显示路径-->
+          <path id="textpath1" d="M 10,10, L 20,50, L 60, 100, L 90,30" style="fill:#50d4ab;stroke:#f66f6a;stroke-width:2px"></path>
+        </defs>
+        <!-- <path id="textpath1" d="M 10,10, L 20,50, L 60, 100, L 90,30" style="fill:#50d4ab;stroke:#f66f6a;stroke-width:2px"></path> -->
+        <text style="font-size:12px;">
+          <textPath href="#textpath1">Hello textpath,我是tetpath,我是沿着path的路径显示。</textPath>
+        </text>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>tspan</p>
+      <svg width="300px" height="300">
+        <defs>
+          <path id="textpath1" d="M 10,10, L 20,50, L 60, 100, L 90,30" style="fill:#50d4ab;stroke:#f66f6a;stroke-width:2px"></path>
+        </defs>
+        <text style="font-size:12px;">
+          <textPath href="#textpath1">Hello,我是<tspan style="fill:#5e7ce0">tspan</tspan>,我是沿着path的路径显示。</textPath>
+        </text>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>use</p>
+      <svg width="300px" height="300">
+        <circle id="circle1" cx="31.5" cy="31.5" r="30" fill="#50d4ab" stroke="#5e7ce0" stroke-width="3px"
+          stroke-opacity="0.5"></circle>
+        <use xlink:href="#circle1" x="70" y="0" style="fill:#999;opacity:0.4"></use>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>symbol</p>
+      <svg width="100%" height="300">
+        <symbol id="sym01" viewBox="0 0 150 110">
+          <circle cx="50" cy="50" r="40" stroke-width="3" stroke="red" fill="#f66f6a" />
+          <circle cx="90" cy="60" r="40" stroke-width="3" stroke="green" fill="#50d4ab" />
+        </symbol>
+        <symbol id="sym02" viewBox="0 0 160 180">
+          <circle id="circle1" cx="31" cy="31" r="30" style="fill:#50d4ab"></circle>
+          <circle id="circle1" cx="131" cy="31" r="30" style="fill:#50d4ab"></circle>
+          <circle id="circle1" cx="81" cy="101" r="80" style="fill:#5D887D"></circle>
+        </symbol>
+
+        <use href="#sym01" x="0" y="0" width="100" height="50" />
+        <use href="#sym01" x="100" y="0" width="50" height="25" />
+
+        <use href="#sym02" x="200" y="0" width="80" height="90" />
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>g</p>
+      <svg width="100%" height="300">
+        <g id="g1">
+          <circle id="circle1" cx="31" cy="31" r="30"></circle>
+          <circle id="circle1" cx="131" cy="31" r="30"></circle>
+          <circle id="circle1" cx="81" cy="101" r="80"></circle>
+        </g>
+        <use href="#g1" x="200" />
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>defs, 内部g标签不支持修改css</p>
+      <svg>
+        <defs>
+          <g id="defs1">
+            <circle id="circle1" cx="31" cy="31" r="30" />
+          </g>
+        </defs>
+        <use href="#defs1" x="0" />
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>pattern</p>
+      <svg width="100%">
+        <!-- <circle cx="31" cy="31" r="30" style="fill:#f66f6a"/> -->
+        <defs>
+          <pattern id="pattern1" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+            <circle cx="31" cy="31" r="30" style="fill:#f66f6a" />
+          </pattern>
+        </defs>
+        <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern1)" style="stroke:#f66f6a;stroke-width:2px;">
+        </rect>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>img</p>
+      <svg width="100%">
+        <image width="100%" height="100%" style="border-radius:50%;overflow:hidden;"
+          xlink:href="https://avatar-static.segmentfault.com/145/611/1456110208-5da034b9a19d8_huge128">
+          <!-- <circle r="50" rx="60" ry="60" fill="url(https://avatar-static.segmentfault.com/145/611/1456110208-5da034b9a19d8_huge128)"> -->
+      </svg>
+    </div>
+
+  </div>
+
+  <h4>裁剪和遮罩 clipPath mask</h4>
+  <div class="wrap">
+
+    <div class="svg-item">
+      <p>clipPath 裁切显示上半圆</p>
+      <svg style="width:100%">
+        <defs>
+          <clipPath id="cut-center">
+            <!-- <circle cx="50" cy="50"  r="30"></circle> -->
+            <rect x="8" y="8" width="104" height="52" />
+          </clipPath>
+        </defs>
+        <circle cx="60" cy="60" r="50" clip-path="url(#cut-center)" style="fill:#50d4ab;stroke:#5D887D;stroke-width:4;"/>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>mask</p>
+      <svg style="width:100%">
+        <defs>
+          <linearGradient id="linearGrident1">
+            <stop offset="0" stop-color="#fff" stop-opacity="0" />
+            <stop offset="1" stop-color="#fff" stop-opacity="1" />
+          </linearGradient>
+          <mask id="mask1">
+            <circle cx="60" cy="60" r="50" fill="url(#linearGrident1)" />
+          </mask>
+        </defs>
+        <circle cx="60" cy="60" r="50" style="fill:#50d4ab;stroke-width:1px;stroke:#50d4ab" />
+        <circle cx="60" cy="60" r="50" style="fill:#f66f6a" mask="url(#mask1)" />
+      </svg>
+    </div>
+
+  </div>
+
+  <h4>动画</h4>
+  <div class="wrap">
+
+    <div class="svg-item">
+      <p>animate</p>
+      <svg style="width:100%">
+        <circle id="svg01" cx="32" cy="32" r="30" fill="#f66f6a" stroke="#333" stroke-width="2px">
+          <animate attributeName="cx" from="32" to="300" dur="2s" repeatCount="indefinite" />
+        </circle>
+        <circle id="svg01" cx="32" cy="32" r="30" fill="#f66f6a" stroke="#333" stroke-width="2px">
+          <animate attributeName="cx" from="32" to="300" dur="2s" repeatCount="indefinite" />
+          <animate attributeName="cy" from="32" to="100" dur="2s" repeatCount="indefinite" />
+          <animate attributeName="r" from="32" to="0" dur="2s" repeatCount="indefinite" />
+          <animate attributeName="opacity" from="1" to="0" dur="2s" repeatCount="indefinite" />
+        </circle>
+      </svg>
+    </div>
+
+    <div class="svg-item">
+      <p>animateTransform</p>
+      <svg style="width:100%">
+        <rect x="51" y="36" width="100" height="50" fill="#50d4ab" stroke="#5D887D" stroke-width="2px">
+          <animateTransform attributeName="transform" type="rotate" begin="200ms" dur="3s" from="0 101 61"
+            to="360 101 61" repeatCount="indefinite" />
+          <!-- <animateTransform attributeName="transform" type="scale" begin="1s" dur="3s" from="0" to="1" repeatCount="indefinite"/> -->
+        </rect>
+      </svg>
+    </div>
+
+
+
+  </div>
+
+  <h4>Javascript</h4>
+  <div class="wrap">
+
+    <div class="svg-item">
+      <p></p>
+      <svg style="width:100%">
+        <rect id="rect1" x="20" y="20" width="100" height="30" style="fill:#50d4ab">
+      </svg>
+      <div class="btn-wrap">
+        <button id="btn1">变大</button>
+      </div>
+      <script>
+        var $btn1 = document.getElementById('btn1')
+        $btn1.onclick = function () {
+          var $svg = document.getElementById('rect1')
+          console.log([$svg], $svg)
+          $svg.setAttribute("width", 150)
+          $svg.setAttribute("height", 45)
+          $svg.style.fill = '#5e7ce0'
+          $svg.style.transform = 'scale(2)'
+        }
+      </script>
+    </div>
+
+
+
+  </div>
+
+
+  <h4>环形进度图</h4>
+  <div class="wrap">
+    <div class="svg-item">
+      <p></p>
+      <svg style="width:100%">
+
+      </svg>
+      <script>
+
+      </script>
+    </div>
+  </div>
+
+  <h4>SVG 条形图,环形进度图</h4>
+  <div class="wrap">
+    <div class="svg-item svg-item-chart" style="background:none">
+      <p>
+        1.获取data<br/>
+        2.绘制svg<br/>
+        3.绘制坐标(x轴，y轴，刻度线，)<br/>
+        4.坐标添加文字<br/>
+        5.依据data绘制矩形（条形）<br/>
+      </p>
+      <svg width="350" height="200" style="background:none">
+        <defs>
+          <style>
+            .bar{width:100%;height:100%;}
+          </style>
+          <filter id="f1" x="0" y="0" width="200%" height="200%">
+            <feOffset result="offOut" in="SourceGraphic" dx="-5" dy="-10" />
+            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" />
+            <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+          </filter>
+        </defs>
+        <g class="bar">
+          <g id="line" stroke="#E4E7ED">
+            <line id="line-x" x1="20" y1="170" x2="330" y2="170"></line>
+            <line id="line-y" x1="20" y1="20" x2="20" y2="170"></line>
+          </g>
+          <g id="axis" fill="#252b3a" style="font-size:10px;">
+            <text id="axis-x" x="20" y="188">
+              <!-- <tspan x="" y="">星期一</tspan> -->
+            </text>
+            <text id="axis-y" x="0" y="20">
+              <!-- <tspan x="" y="">60</tspan> -->
+            </text>
+          </g>
+          <g id="rect">
+            <!-- <rect width="20" height="120" x="60" y="50" style="fill:#66b1ff;stroke:#409EFF"/> -->
+          </g>
+        </g>
+      </svg>
+      <script type="text/Javascript">
+        const data = [
+          { data: '星期一', num: 100 },
+          { data: '星期二', num: 300 },
+          { data: '星期三', num: 900 },
+          { data: '星期四', num: 1500 },
+          { data: '星期五', num: 1900 },
+          { data: '星期六', num: 3000 },
+          { data: '星期日', num: 2100 }
+        ]
+ 
+        window.onload = function(){
+          const length = data.length
+          const xOffset = 310/(length-1)
+          const yNum = 5
+          const yOffset = 150/(yNum-1)
+          const barWidth = 20
+          var axisX = document.getElementById('axis-x')
+          var axisY = document.getElementById('axis-y')
+          var rect = document.getElementById('rect')
+          // 1 画x轴坐标
+          var max = data[0].num
+          for(let i in data){
+            // console.log(data[i].data)
+            axisX.innerHTML += '<tspan x="' + (20+i*(xOffset-5)) +'">' + data[i].data + '</tspan>'
+            max = data[i].num > max? data[i].num : max
+          }
+          console.log(max);
+          // 2 画y轴坐标，根据最大值取整
+          let avgY = Math.ceil(max/(yNum-1))
+          let baseNum = 0
+          for(var j=0; j<yNum; j++){
+            let setNum = parseInt(baseNum)+parseInt(j*avgY)
+            axisY.innerHTML += '<tspan x="0" y="' + (170 - j*yOffset) +'">' + setNum + '</tspan>'
+          }
+          // 3 画矩形
+          for(let n in data){
+            // 计算相对高度
+            let barHeight = 150*(data[n].num/max)
+            let barXOffset = 20 + 20*n +((310 -(barWidth * length ))/(length - 1))*n
+            let barYOffset = 20+150-barHeight
+            // console.log(barHeight,barXOffset,  barYOffset);
+            rect.innerHTML += '<rect width="' + barWidth +'" height="'+ barHeight +'" x="'+ barXOffset +'" y="'+ barYOffset +'" style="fill:#66b1ff;stroke:#409EFF"></rect>'
+          }
+        }
+      </script>
+    </div>
+
+    <div class="svg-item svg-item-chart" style="background:none">
+      <p>
+        1.绘制环形进度图<br/>
+        2.根据参数动态计算<br/>
+      </p>
+      <svg width="160" height="160" style="background:none">
+        <g style="position:relative">
+          <circle cx="80" cy="80" r="70" fill="none" stroke="#EBEEF5" stroke-width="10"></circle>
+          <circle cx="80" cy="80" r="70" fill="none" stroke="#409EFF" stroke-width="10" 
+          stroke-linecap="round"
+          stroke-dashoffset="110"
+          stroke-dasharray="110 330">
+            <animate attributeName="stroke-dasharray" from="0,440" to="110 330" dur="1s"></animate>
+            <animate attributeName="opacity" from="0" to="1" dur="1s"></animate>
+          </circle>
+          <text x="65" y="85" style="font-size:14px;">
+            <tspan>25%</tspan>
+            <!-- <animateTransform attributeName="transform" type="translateX" begin="0s" from="0" to="-50%" dur="0s"></animateTransform> -->
+            <!-- <animateTransform attributeName="transform" type="rotate" begin="200ms" dur="3s" from="0 101 61" to="360 101 61" repeatCount="indefinite"/> -->
+          </text>
+        </g>
+      </svg>
+      <svg width="160" height="160" style="background:none">
+        <g style="position:relative">
+          <circle cx="80" cy="80" r="70" fill="none" stroke="#EBEEF5" stroke-width="10"></circle>
+          <circle cx="80" cy="80" r="70" fill="none" stroke="#409EFF" stroke-width="10" 
+          stroke-linecap="round"
+          stroke-dashoffset="110"
+          stroke-dasharray="330 110">
+            <animate attributeName="stroke-dasharray" from="0,440" to="330 110" dur="1s"></animate>
+            <animate attributeName="opacity" from="0" to="1" dur="1s"></animate>
+          </circle>
+          <text x="65" y="85" style="font-size:14px;">
+            <tspan>75%</tspan>
+          </text>
+        </g>
+      </svg>
+      <script type="text/Javascript">
+        
+      </script>
+    </div>
+  </div>
+
+</body>
+
+</html>
